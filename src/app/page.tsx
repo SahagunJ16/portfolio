@@ -1,14 +1,39 @@
-import { getPortfolioData } from "@/lib/portfolio";
-import { Profile, About, Skills, Experiences } from "@/components/sections";
+import type { Metadata } from "next";
 
-export default async function Home() {
-  const data = await getPortfolioData();
+import { JsonLd } from "@/components/json-ld";
+import { ContactSection } from "@/components/portfolio/contact-section";
+import { EducationSection } from "@/components/portfolio/education-section";
+import { ExperienceSection } from "@/components/portfolio/experience-section";
+import { Hero } from "@/components/portfolio/hero";
+import { OverviewSection } from "@/components/portfolio/overview-section";
+import { StackSection } from "@/components/portfolio/stack-section";
+import { buildJsonLdGraph } from "@/lib/json-ld";
+import { absoluteUrl } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/") },
+};
+
+/**
+ * The portfolio. A Server Component — every interactive piece (theme toggle,
+ * command palette, copy buttons, sidebar nav) is an isolated client leaf, so
+ * this page ships as static HTML.
+ *
+ * The `Person` + `ProfilePage` graph lives here rather than in the root
+ * layout: `ProfilePage` names the home URL, so emitting it site-wide would
+ * have `/experiences` and `/stack` each claiming to be the profile page.
+ */
+export default function Home() {
   return (
-    <main className="mt-5 p-4">
-      <Profile profile={data.profile} socials={data.socials} />
-      <About profile={data.profile} />
-      <Skills skills={data.skills} />
-      <Experiences experiences={data.experiences} />
-    </main>
+    <>
+      <Hero />
+      <OverviewSection />
+      <ExperienceSection />
+      <StackSection />
+      <EducationSection />
+      <ContactSection />
+
+      <JsonLd data={buildJsonLdGraph()} id="profile-schema" />
+    </>
   );
 }
