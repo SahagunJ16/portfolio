@@ -1,106 +1,230 @@
-# Osweng's Personal Portfolio
+# Portfolio — Joshua Sahagun
 
-A minimal, personal portfolio built with Next.js (App Router), TypeScript, Tailwind CSS, and DaisyUI. Content is loaded from a single JSON file stored in [Vercel Blob](https://vercel.com/docs/storage/vercel-blob), so the data can be updated without redeploying.
+A personal portfolio. Modern, minimalist and monotone, built on Next.js App
+Router with shadcn/ui.
 
-## Features
+Everything is rendered from a single static data file. There is no CMS, no
+database and no API — update [`src/data/data.tsx`](src/data/data.tsx) and the
+whole site follows.
 
-- **Fast & lightweight** – Next.js 16, React 19
-- **Responsive** – Mobile-first layout
-- **SEO-friendly** – Metadata and semantic HTML
-- **Dark/Light mode** – Theme toggle with system preference support
-- **Data-driven** – Profile (including avatar), about, skills, and experience from one JSON in Vercel Blob
-- **Easy to update** – Change copy via Blob; no code changes needed
+## Routes
 
-## Tech stack
+| Route | What it holds |
+|---|---|
+| `/` | Hero and five sections. Experience and Stack are summaries |
+| `/experiences` | Every role, expandable, on a career timeline |
+| `/stack` | Every category and skill |
 
-- [Next.js](https://nextjs.org/) 16 (App Router)
-- [React](https://react.dev/) 19
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/) 4
-- [DaisyUI](https://daisyui.com/)
-- [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) for content
-- [Iconify](https://iconify.design/) for icons
+The detail pages live in the `(pages)/` route group, which doesn't affect their
+URLs.
+
+## Stack
+
+| | |
+|---|---|
+| Framework | Next.js 16 (App Router, Turbopack) |
+| Runtime | React 19 |
+| Styling | Tailwind CSS v4 (CSS-first config in `src/app/globals.css`) |
+| Components | shadcn/ui — `base-lyra` style on [Base UI](https://base-ui.com) primitives |
+| Theming | `next-themes` (light / dark / system) |
+| Icons | `lucide-react` (UI) + `react-icons` (social brands) |
+| Analytics | `@vercel/analytics` (only reports on Vercel deployments) |
+| Package manager | **pnpm** |
 
 ## Getting started
 
-### Prerequisites
-
-- Node.js 18+
-- npm (or yarn/pnpm)
-
-### 1. Install
-
 ```bash
-npm install
+pnpm install
+cp .env.example .env.local     # then edit NEXT_PUBLIC_SITE_URL
+pnpm dev
 ```
 
-### 2. Environment variables
+The dev server runs on **http://localhost:3000**. Next.js will pick the next
+free port if 3000 is taken.
 
-Copy the example env file and set the Blob URL:
+## Scripts
 
-```bash
-cp .env.example .env.local
+| Command | What it does |
+|---|---|
+| `pnpm dev` | Dev server on port 3000 |
+| `pnpm build` | Production build (the whole site prerenders as static) |
+| `pnpm start` | Serve the production build |
+| `pnpm lint` | ESLint (`next/core-web-vitals` + TypeScript rules) |
+| `pnpm typecheck` | `tsc --noEmit` |
+
+Run `pnpm typecheck && pnpm lint && pnpm build` before deploying.
+
+## Environment variables
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Production only | Absolute origin used for canonical URLs, `sitemap.xml`, `robots.txt` and Open Graph image URLs. No trailing slash. Falls back to `http://localhost:3000`. |
+
+Set it in your hosting provider's environment settings. See
+[`.env.example`](.env.example). Never commit a real `.env.local`.
+
+## Assets
+
+| Path | Status | Used by |
+|---|---|---|
+| `public/images/avatar.png` | ✅ present (1600×1600) | Hero avatar, `Person` structured data |
+| `public/resume.pdf` | ⬜ not yet added | Hero **Resume** button, ⌘K palette |
+
+The avatar is rendered through `next/image` at 144px (288px for 2× displays),
+so the 1.4 MB original is never sent to visitors — the browser gets a small
+resized variant. No manual downscaling needed. If the file is missing the
+avatar falls back to the initials `JS`, and the **Resume** button renders
+whether or not the PDF exists.
+
+Both paths are defined once in [`src/lib/seo.ts`](src/lib/seo.ts) as
+`AVATAR_PATH` and `RESUME_PATH`. Change them there, not at the call sites.
+See [`public/images/README.md`](public/images/README.md) for details.
+
+## Editing content
+
+All copy lives in [`src/data/data.tsx`](src/data/data.tsx), typed against the
+`PortfolioData` interface in the same file. TypeScript will tell you if a
+required field is missing.
+
+**`experiences` is nested one level.** An entry is an *organization* holding a
+`roles` array — the shape a career actually has:
+
+```ts
+{
+  organization: "Collins Aerospace",
+  roles: [
+    { title: "Business System Analyst III", start: …, end: …, summary: …, highlights: […] },
+    { title: "Business System Analyst II",  … },
+  ],
+}
 ```
 
-Edit `.env.local`:
+- **Adding a role** — push onto that organization's `roles`, newest first.
+  Everything that varies between roles (title, location, employment, dates,
+  summary, highlights) belongs on the role.
+- **Adding an employer** — push a new entry onto `experiences`, newest first.
+- **Date spans** — an organization has no `start`/`end` of its own. They're
+  derived from its roles by `getExperienceSpan()`, so the header dates can
+  never disagree with the roles beneath them.
+- **Dates** — `{ month: 1-12, year: YYYY }`. An `end` of `null` means "current"
+  and renders as *Present*, and fills that role's timeline bullet. Durations
+  and the "N+ years" figure in the hero are computed at render time, so they
+  never go stale.
+- **Skills** — `stack[].skills` are objects: `{ name: "React", featured: true }`.
+  The `featured` flag is the *only* thing controlling what the home page
+  summary shows. `/stack` always shows everything.
+- **Adding or reordering sections** — edit `SECTIONS` in
+  [`src/lib/navigation.ts`](src/lib/navigation.ts). That single array drives the
+  section numbering, the sidebar nav, the scroll-spy, the ⌘K palette and the
+  sitemap. A section with a `detailHref` automatically gets a "view all" link
+  and its own sitemap entry. Then add the matching `<Section>` to
+  `src/app/page.tsx`.
 
-- **`PORTFOLIO_DATA_URL`** (required) – Full URL of the portfolio JSON in Vercel Blob (e.g. `https://xxxxx.private.blob.vercel-storage.com/data.json`).
-- **`BLOB_READ_WRITE_TOKEN`** (optional for local) – Vercel sets this when the Blob store is linked. For local dev, add it if using a private Blob.
+### Contact privacy
 
-See [.env.example](.env.example) for comments.
-
-### 3. Run locally
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-### 4. Data shape
-
-The app expects a JSON file in Vercel Blob with this structure (see [src/types/portfolio.ts](src/types/portfolio.ts) for full types):
-
-- **seo** (optional) – `title`, `description`, `keywords`. If omitted, title/description are derived from profile; keywords get the profile name appended.
-- **profile** – `name`, `role`, `role_summary`, `about` (string or string[]), `email`, optional `avatar` (URL of profile image, e.g. from Vercel Blob).
-- **socials** – `{ name, url }[]`
-- **skills** – `{ name, icon }[]` (icon: Iconify icon name, e.g. `mdi:language-typescript`)
-- **experiences** – companies and positions with `descriptions`, `start`, `end`
-
-Only `profile` is required; other sections can be empty arrays or omitted. Upload a profile image to the same Blob store and set `profile.avatar` to that blob URL.
+`DATA.contact` holds a mobile number and a postal code. **Neither is rendered.**
+The UI shows only the email address and `getPublicLocation()` (city, region,
+country). If you want the phone number public, surface it explicitly in
+`src/components/portfolio/contact-section.tsx`.
 
 ## Project structure
 
 ```
 src/
-├── app/                    # App Router routes
-│   ├── layout.tsx          # Root layout, metadata, Navbar/Footer
-│   ├── page.tsx            # Home (profile, about, skills, experience)
-│   └── globals.css         # Tailwind + DaisyUI + custom styles
-├── components/
-│   ├── layout/             # Navbar, Footer
-│   ├── sections/           # Profile, About, Skills, Experiences
-│   └── ui/                 # ExpandableText, Marquee
-├── lib/
-│   └── portfolio.ts        # getPortfolioData() – fetches & caches Blob JSON
-└── types/
-    └── portfolio.ts        # TypeScript interfaces for portfolio data
+  app/
+    layout.tsx            root layout, metadata, providers, sidebar/footer
+    page.tsx              the home page + Person/ProfilePage JSON-LD
+    globals.css           Tailwind v4 theme tokens
+    not-found.tsx         styled 404
+    opengraph-image.tsx   generated 1200×630 card (cascades to child routes)
+    twitter-image.tsx     re-exports the OG card
+    sitemap.ts robots.ts manifest.ts
+    (pages)/
+      experiences/        full career timeline
+      stack/              full toolkit
+  components/
+    layout/               Container, Section, PageHeader, SiteSidebar, SiteFooter
+    portfolio/            Hero, ExperienceTimeline + one component per section
+    ui/                   shadcn components (project-owned source)
+    *.tsx                 shared atoms — TagList, MetaList, DateRange, ViewAllLink, …
+  data/data.tsx           ← all content
+  hooks/                  useActiveSection, useCopyToClipboard, useIsHydrated
+  lib/                    format, portfolio, navigation, seo, json-ld, utils
 ```
 
-## Scripts
+### Server/client boundary
 
-| Command         | Description              |
-|-----------------|--------------------------|
-| `npm run dev`   | Start dev server         |
-| `npm run build` | Production build         |
-| `npm run start` | Start production server  |
-| `npm run lint`  | Run ESLint               |
+`page.tsx`, both detail pages and all six sections are **Server Components**.
+Only the interactive leaves are `"use client"`: `theme-toggle`,
+`command-palette`, `copy-button`, `site-sidebar` and the shadcn primitives that
+need it.
 
-## Deploy
+> `DATA.socials[].icon` holds React **component references**, so `DATA` must not
+> be passed wholesale into a client component. `SocialLinks` stays server-side
+> and is handed *into* the client `SiteSidebar` as an already-rendered slot
+> prop; the ⌘K palette receives plain `{ label, url }` pairs instead.
 
-Deploy on [Vercel](https://vercel.com):
+## Design notes
 
-1. Push the repo to GitHub.
-2. Import the project in Vercel and link the repo.
-3. Create a Vercel Blob store, upload `data.json`, and add the blob URL as `PORTFOLIO_DATA_URL` in Vercel project settings (Environment Variables). Link the store so `BLOB_READ_WRITE_TOKEN` is set automatically.
-4. Deploy.
+- **Navigation** — a fixed left rail from `lg` up (monogram, numbered sections
+  with an active indicator, ⌘K, theme, socials); a sticky top bar with a drawer
+  below that. Both come from one component,
+  `src/components/layout/site-sidebar.tsx`, so the nav list is declared once.
+- **Layout** — one measure (`max-w-4xl`) shared by main, footer and the detail
+  pages, offset by the rail with `lg:pl-56`. Each section is headed by a
+  numbered mono label and a hairline rule, defined once in
+  `src/components/layout/section.tsx`.
+- **Type** — Geist (body), Geist Mono (numbers, labels, dates), Instrument Sans
+  (headings), all self-hosted via `next/font`.
+- **Colour** — zinc only. Emphasis comes from contrast, weight and rule
+  placement, never hue. Light mode uses an off-white `--background` with pure
+  white cards so hairline borders read as layered.
+- **shadcn components are project-owned source.** Edit them in place; don't
+  re-run `shadcn init`, which would rewrite `components.json`.
+
+## Adding shadcn components
+
+```bash
+pnpm dlx shadcn@latest add <component>
+```
+
+`components.json` is already configured (`base-lyra` style, zinc base, Base UI
+primitives), so new components arrive matching the existing ones.
+
+## Accessibility
+
+- One `<h1>` per route. On `/`: sections are `<h2>`, organizations `<h3>`,
+  roles `<h4>`. On `/experiences`: organizations are `<h2>`, roles `<h3>`.
+- Skip-to-content link is the first focusable element.
+- Every date is a real `<time datetime>`.
+- Smooth scrolling is disabled under `prefers-reduced-motion`.
+
+## SEO
+
+Site-wide metadata, Open Graph and Twitter cards are defined in
+`src/app/layout.tsx`; each detail route adds its own title, description and
+canonical. All JSON-LD is generated from `DATA` at render time by
+`src/lib/json-ld.ts`, so structured data cannot drift from the visible page.
+
+`Person` + `ProfilePage` is emitted **only on `/`** — `ProfilePage` names the
+home URL, so putting it in the root layout would have every detail route claim
+to be the profile page. `/experiences` and `/stack` emit a `BreadcrumbList`
+instead.
+
+The sitemap derives its routes from `SECTIONS`, so a new detail page is listed
+automatically.
+
+After deploying, verify:
+
+- `/sitemap.xml`, `/robots.txt`, `/manifest.webmanifest`, `/opengraph-image`
+- The JSON-LD blocks with the [Rich Results Test](https://search.google.com/test/rich-results)
+- The share card with a social debugger
+
+## Deployment
+
+The site prerenders entirely to static output and deploys anywhere that runs
+Next.js. On Vercel: import the repo, set `NEXT_PUBLIC_SITE_URL`, deploy.
+
+Web Analytics is wired up via `@vercel/analytics` in the root layout. It is
+inert outside Vercel, so local dev and self-hosted builds are unaffected;
+enable Web Analytics in the Vercel project settings to start collecting.
