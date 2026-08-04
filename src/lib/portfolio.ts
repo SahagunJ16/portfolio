@@ -1,74 +1,133 @@
-import { cache } from "react";
-import { get } from "@vercel/blob";
-import type { Profile, Seo, Experience, Skill, Social } from "@/types/portfolio";
+import {
+  DATA,
+  type Experience,
+  type ExperienceRole,
+  type MonthYear,
+  type Skill,
+} from "@/data/data";
+import { monthsBetween } from "@/lib/format";
 
-/** Raw shape of JSON stored in Vercel Blob (fields may be missing) */
-interface RawPortfolioData {
-  seo?: { title?: string; description?: string; keywords?: string };
-  profile?: Profile;
-  socials?: Social[];
-  skills?: Skill[];
-  experiences?: Experience[];
+/** Overall dates an organization was worked at, derived from its roles. */
+export interface ExperienceSpan {
+  start: MonthYear;
+  /** `null` when any role there is still current. */
+  end: MonthYear | null;
 }
 
-/** Result of getPortfolioData() with derived SEO */
-export interface PortfolioData {
-  profile: Profile;
-  seo: Seo;
-  socials: Social[];
-  skills: Skill[];
-  experiences: Experience[];
+/** A role paired with the organization it was held at. */
+export interface RoleWithOrganization {
+  organization: string;
+  role: ExperienceRole;
 }
 
-function buildSeo(raw: RawPortfolioData, profile: Profile): Seo {
-  const name = `${profile.name.first} ${profile.name.last}`;
-  const defaultTitle = `${name} | ${profile.role}`;
-  const defaultDescription = `${name}'s portfolio`;
-  const keywordsFromData = raw.seo?.keywords?.trim() ?? "";
-  const keywordsWithName = [keywordsFromData, name].filter(Boolean).join(", ");
+function isEarlier(a: MonthYear, b: MonthYear): boolean {
+  return a.year !== b.year ? a.year < b.year : a.month < b.month;
+}
 
-  return {
-    title: raw.seo?.title?.trim() ?? defaultTitle,
-    description: raw.seo?.description?.trim() ?? defaultDescription,
-    keywords: keywordsWithName || defaultTitle,
-  };
+function isLater(a: MonthYear, b: MonthYear): boolean {
+  return a.year !== b.year ? a.year > b.year : a.month > b.month;
 }
 
 /**
- * Fetches portfolio data from Vercel Blob (private store).
- * Cached per request via React cache() so multiple callers only trigger one fetch.
+ * Earliest start and latest end across an organization's roles.
  *
- * Requires env:
- * - BLOB_READ_WRITE_TOKEN (Vercel sets this when Blob store is linked)
- * - PORTFOLIO_DATA_URL – full URL of the blob (e.g. https://xxx.private.blob.vercel-storage.com/data.json)
+ * Computed rather than stored on the data, so the header dates of a timeline
+ * block can never disagree with the roles listed underneath it.
  */
-export const getPortfolioData = cache(async (): Promise<PortfolioData> => {
-  const url = process.env.PORTFOLIO_DATA_URL;
-  if (!url) {
-    throw new Error(
-      "Missing PORTFOLIO_DATA_URL. Set it to your Vercel Blob JSON URL (e.g. https://xxx.private.blob.vercel-storage.com/data.json)"
-    );
-  }
+export function getExperienceSpan(experience: Experience): ExperienceSpan {
+  return experience.roles.reduce<ExperienceSpan>(
+    (span, role) => ({
+      start: isEarlier(role.start, span.start) ? role.start : span.start,
+      // A single open-ended role keeps the whole organization open-ended.
+      end:
+        span.end === null || role.end === null
+          ? null
+          : isLater(role.end, span.end)
+            ? role.end
+            : span.end,
+    }),
+    { start: experience.roles[0].start, end: experience.roles[0].end }
+  );
+}
 
-  const result = await get(url, { access: "private" });
-  if (!result || result.statusCode !== 200 || !result.stream) {
-    throw new Error("Failed to fetch portfolio data from Blob");
-  }
+/**
+ * The newest role at an organization — what the home page summary shows.
+ * Chosen by start date rather than by array position, so reordering the data
+ * can't quietly change which role is presented as current.
+ */
+export function getLatestRole(experience: Experience): ExperienceRole {
+  return experience.roles.reduce((latest, role) =>
+    isLater(role.start, latest.start) ? role : latest
+  );
+}
 
-  const text = await new Response(result.stream).text();
-  const raw = JSON.parse(text) as RawPortfolioData;
+/** Every role across every organization, flattened, newest organization first. */
+export function getAllRoles(): RoleWithOrganization[] {
+  return DATA.experiences.flatMap((experience) =>
+    experience.roles.map((role) => ({ organization: experience.organization, role }))
+  );
+}
 
-  if (!raw.profile) {
-    throw new Error("Portfolio data is missing required field: profile");
-  }
+/** The role currently held, if any. */
+export function getCurrentRole(): RoleWithOrganization | undefined {
+  return getAllRoles().find((entry) => entry.role.end === null);
+}
 
-  const seo = buildSeo(raw, raw.profile);
+export function getFullName(): string {
+  return `${DATA.profile.first_name} ${DATA.profile.last_name}`;
+}
 
-  return {
-    profile: raw.profile,
-    seo,
-    socials: Array.isArray(raw.socials) ? raw.socials : [],
-    skills: Array.isArray(raw.skills) ? raw.skills : [],
-    experiences: Array.isArray(raw.experiences) ? raw.experiences : [],
-  };
-});
+export function getInitials(): string {
+  return `${DATA.profile.first_name[0]}${DATA.profile.last_name[0]}`.toUpperCase();
+}
+
+/** The primary headline, used as the job title in metadata and structured data. */
+export function getPrimaryHeadline(): string {
+  return DATA.overview.headlines[0];
+}
+
+/** City and region only — the postal code is deliberately not surfaced. */
+export function getPublicLocation(): string {
+  return DATA.contact.address.replace(/\s+\d{4,}$/, "");
+}
+
+/**
+ * Whole years of professional experience, measured from the earliest role.
+ * Computed rather than hardcoded so it never goes stale.
+ */
+export function getYearsOfExperience(): number {
+  const roles = getAllRoles();
+
+  const earliest = roles.reduce<MonthYear>(
+    (earliestSoFar, entry) =>
+      isEarlier(entry.role.start, earliestSoFar) ? entry.role.start : earliestSoFar,
+    roles[0].role.start
+  );
+
+  const now = new Date();
+  const months = monthsBetween(earliest, {
+    month: now.getMonth() + 1,
+    year: now.getFullYear(),
+  });
+
+  return Math.max(Math.floor(months / 12), 1);
+}
+
+/** The skills flagged `featured`, for the home page stack summary. */
+export function getFeaturedSkills(): Skill[] {
+  return DATA.stack.flatMap((category) =>
+    category.skills.filter((skill) => skill.featured)
+  );
+}
+
+/** Every skill name across all categories, de-duplicated. */
+export function getAllSkills(): string[] {
+  return [
+    ...new Set(DATA.stack.flatMap((category) => category.skills.map((skill) => skill.name))),
+  ];
+}
+
+/** The organizations worked at, most recent first. */
+export function getOrganizations(): string[] {
+  return DATA.experiences.map((experience) => experience.organization);
+}
