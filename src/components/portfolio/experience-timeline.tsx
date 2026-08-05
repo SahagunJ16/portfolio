@@ -54,12 +54,14 @@ export function ExperienceTimeline({ experiences }: ExperienceTimelineProps) {
           <li key={experience.organization} className="flex gap-4 sm:gap-5">
             <div className="flex flex-col items-center">
               <OrganizationLogoLink experience={experience} size="lg" />
-              {!isLast && <span aria-hidden className="my-2 w-px flex-1 bg-border" />}
+              {!isLast && (
+                <span aria-hidden className="my-2 w-px flex-1 bg-border" />
+              )}
             </div>
 
             <div className="min-w-0 flex-1 pb-12 sm:pb-14">
-              <header className="flex flex-col gap-1.5">
-                <h2 className="font-heading text-xl tracking-tight text-pretty text-foreground">
+              <header className="flex flex-col mt-1.5">
+                <h2 className="font-heading text-base tracking-tight text-pretty text-foreground leading-3">
                   {experience.organization}
                 </h2>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -67,7 +69,9 @@ export function ExperienceTimeline({ experiences }: ExperienceTimelineProps) {
                   <span aria-hidden className="text-border">
                     /
                   </span>
-                  <span className="label-mono">{experience.roles[0].location.address}</span>
+                  <span className="label-mono">
+                    {experience.roles[0].location.address}
+                  </span>
                 </div>
               </header>
 
@@ -92,8 +96,8 @@ export function ExperienceTimeline({ experiences }: ExperienceTimelineProps) {
                       headingLevel="h3"
                       className="gap-4 py-2.5 hover:no-underline"
                     >
-                      <span className="flex min-w-0 flex-1 flex-col items-start gap-2 pr-2">
-                        <span className="font-heading text-base leading-snug text-pretty text-foreground">
+                      <span className="flex min-w-0 flex-1 flex-col items-start pr-2">
+                        <span className="font-heading text-sm leading-snug text-pretty text-foreground">
                           {role.title}
                         </span>
                         <RoleMeta role={role} showDuration />
@@ -125,7 +129,9 @@ function Bullet({ isCurrent }: { isCurrent: boolean }) {
       aria-hidden
       className={cn(
         "absolute top-(--bullet-top) left-0 size-2 -translate-x-1/2 rounded-full border",
-        isCurrent ? "border-foreground bg-foreground" : "border-border bg-background"
+        isCurrent
+          ? "border-foreground bg-foreground"
+          : "border-border bg-background",
       )}
     />
   );
@@ -140,11 +146,18 @@ function RoleMeta({
 }) {
   return (
     <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-      <DateRange start={role.start} end={role.end} showDuration={showDuration} />
+      <DateRange
+        start={role.start}
+        end={role.end}
+        showDuration={showDuration}
+      />
       <Badge variant="outline" className="font-mono font-normal">
         {role.employment}
       </Badge>
-      <Badge variant="ghost" className="font-mono font-normal text-muted-foreground">
+      <Badge
+        variant="ghost"
+        className="font-mono font-normal text-muted-foreground"
+      >
         {role.location.type}
       </Badge>
     </span>
@@ -154,7 +167,9 @@ function RoleMeta({
 function RoleDetail({ role }: { role: ExperienceRole }) {
   return (
     <div className="flex flex-col gap-4 pr-2 sm:pr-8">
-      <p className="text-sm leading-relaxed text-pretty text-foreground">{role.summary}</p>
+      <p className="text-sm leading-relaxed text-pretty text-foreground">
+        {role.summary}
+      </p>
 
       <ul className="flex flex-col gap-2.5">
         {role.highlights.map((highlight) => (
