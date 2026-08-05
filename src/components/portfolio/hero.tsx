@@ -51,10 +51,10 @@ export function Hero() {
                 priority
               />
             }
-            className="grayscale transition-[filter] duration-200 group-hover:grayscale-0"
+            className="bg-background grayscale transition-[filter] duration-200 group-hover:grayscale-0"
           />
 
-          <AvatarFallback className="font-heading text-4xl">
+          <AvatarFallback className="bg-background font-heading text-4xl">
             {getInitials()}
           </AvatarFallback>
         </Avatar>
