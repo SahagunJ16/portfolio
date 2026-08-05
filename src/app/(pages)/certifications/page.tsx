@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
-import { TagList } from "@/components/tag-list";
+import { CertificationCard } from "@/components/portfolio/certification-card";
 import { DATA } from "@/data/data";
-import { formatIndex, formatMonthYear, toIsoMonth } from "@/lib/format";
+import { formatIndex } from "@/lib/format";
 import { buildBreadcrumbGraph } from "@/lib/json-ld";
 import { getSectionIndex } from "@/lib/navigation";
 import { getAllCertifications } from "@/lib/portfolio";
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 /**
  * Every certification, grouped by category. The home page summary links
- * here and shows the same records as a flat, uncategorized list.
+ * here and shows the same cards as a flat, uncategorized list.
  */
 export default function CertificationsPage() {
   return (
@@ -52,43 +52,10 @@ export default function CertificationsPage() {
                   <h2 className="label-mono text-foreground">{category.category}</h2>
                 </div>
 
-                <ul className="flex flex-col gap-6">
+                <ul className="grid gap-4 sm:grid-cols-2">
                   {category.certifications.map((certification) => (
-                    <li key={certification.credentialId} className="flex flex-col gap-2">
-                      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                        <a
-                          href={certification.credentialUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-heading text-lg text-pretty text-foreground underline-offset-4 hover:underline"
-                        >
-                          {certification.name}
-                        </a>
-
-                        <span className="label-mono shrink-0 text-muted-foreground">
-                          <time dateTime={toIsoMonth(certification.issueDate)}>
-                            {formatMonthYear(certification.issueDate)}
-                          </time>
-                          {certification.expirationDate && (
-                            <>
-                              {" – "}
-                              <time dateTime={toIsoMonth(certification.expirationDate)}>
-                                {formatMonthYear(certification.expirationDate)}
-                              </time>
-                            </>
-                          )}
-                        </span>
-                      </div>
-
-                      <p className="text-sm text-muted-foreground">
-                        {certification.issuer} · Credential ID {certification.credentialId}
-                      </p>
-
-                      <TagList
-                        items={certification.skills.map((skill) => ({ name: skill }))}
-                        label={`Skills for ${certification.name}`}
-                        className="gap-2.5"
-                      />
+                    <li key={certification.credentialId}>
+                      <CertificationCard certification={certification} />
                     </li>
                   ))}
                 </ul>
