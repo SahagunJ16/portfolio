@@ -5,7 +5,6 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 import { CommandPalette } from "@/components/command-palette";
-import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteSidebar } from "@/components/layout/site-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -134,8 +133,6 @@ export default function RootLayout({
               <main id="main" className="flex-1">
                 {children}
               </main>
-
-              <SiteFooter />
             </div>
 
             {/* Serializable props only — DATA.socials[].icon cannot cross this boundary. */}

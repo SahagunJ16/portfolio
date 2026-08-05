@@ -117,8 +117,8 @@ intentional local changes (`accordion.tsx` gained a `headingLevel` prop,
 
 `src/components/layout/site-sidebar.tsx` is the fixed nav rail from `lg` up and
 a sticky top bar with a drawer below it — **one component for both**, so the
-nav list is declared once. The root layout offsets main and footer with
-`lg:pl-56` because the rail is out of flow.
+nav list is declared once. The root layout offsets main with `lg:pl-56`
+because the rail is out of flow.
 
 `src/components/layout/section.tsx` owns the numbered section header (mono
 label, hairline rule, and the "View All" link for sections with a
@@ -126,7 +126,8 @@ label, hairline rule, and the "View All" link for sections with a
 column: the section numbers moved to the sidebar, so a second sticky left
 rail here would just compete with it.
 
-`Container` is the one shared measure for main, footer and the detail pages.
+`Container` is the one shared measure for main and the detail pages. There is
+no site footer — the hero's contact CTA and the ⌘K palette cover it.
 
 ### Reuse before creating
 

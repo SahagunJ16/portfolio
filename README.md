@@ -166,7 +166,7 @@ country). If you want the phone number public, surface it explicitly in
 ```
 src/
   app/
-    layout.tsx            root layout, metadata, providers, sidebar/footer
+    layout.tsx            root layout, metadata, providers, sidebar
     page.tsx              the home page + Person/ProfilePage JSON-LD
     globals.css           Tailwind v4 theme tokens
     not-found.tsx         styled 404
@@ -180,7 +180,7 @@ src/
       stack/              full toolkit
       certifications/     full credential list, grouped by category
   components/
-    layout/               Container, Section, PageHeader, SiteSidebar, SiteFooter
+    layout/               Container, Section, PageHeader, SiteSidebar
     portfolio/            Hero, ExperienceTable (home), ExperienceTimeline
                           (/experiences), OrganizationLogoLink + one component
                           per section
@@ -210,12 +210,12 @@ need it.
   with an active indicator, ⌘K, theme); a sticky top bar with a drawer below
   that. Both come from one component,
   `src/components/layout/site-sidebar.tsx`, so the nav list is declared once.
-- **Socials** — shown once, in the hero, rather than repeated in the sidebar,
-  footer and contact section. `src/components/social-links.tsx`.
-- **Layout** — one measure (`max-w-4xl`) shared by main, footer and the detail
-  pages, offset by the rail with `lg:pl-56`. Each section is headed by a
-  numbered mono label and a hairline rule, defined once in
-  `src/components/layout/section.tsx`.
+- **Socials** — shown once, in the hero, rather than repeated across the
+  sidebar and contact section. `src/components/social-links.tsx`.
+- **Layout** — one measure (`max-w-4xl`) shared by main and the detail pages,
+  offset by the rail with `lg:pl-56`. Each section is headed by a numbered
+  mono label and a hairline rule, defined once in
+  `src/components/layout/section.tsx`. There is no site footer.
 - **Type** — Geist (body), Geist Mono (numbers, labels, dates), Instrument Sans
   (headings), all self-hosted via `next/font`.
 - **Colour** — zinc only. Emphasis comes from contrast, weight and rule
