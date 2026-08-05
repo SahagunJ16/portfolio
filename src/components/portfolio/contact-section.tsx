@@ -1,7 +1,6 @@
 import { CopyButton } from "@/components/copy-button";
 import { Section } from "@/components/layout/section";
 import { MetaList, type MetaItem } from "@/components/meta-list";
-import { SocialLinks } from "@/components/social-links";
 import { DATA } from "@/data/data";
 import { getPublicLocation } from "@/lib/portfolio";
 
@@ -31,7 +30,6 @@ export function ContactSection() {
       ),
     },
     { label: "Based in", value: getPublicLocation() },
-    { label: "Profiles", value: <SocialLinks variant="labelled" /> },
   ];
 
   return (

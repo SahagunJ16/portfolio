@@ -4,19 +4,18 @@ import { toExternalUrl } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 interface SocialLinksProps {
-  /** `icon` shows icon-only buttons; `labelled` shows icon + platform name. */
-  variant?: "icon" | "labelled";
   className?: string;
 }
 
 /**
- * Social buttons rendered from `DATA.socials`.
+ * Social buttons rendered from `DATA.socials`, icon + platform name. Shown
+ * only in the hero — kept in one place rather than repeated in the sidebar,
+ * footer and contact section.
  *
  * Server component by necessity: `DATA.socials[].icon` holds React component
- * references, which cannot be serialised across a client boundary. Anything
- * client-side (the command palette) receives plain label/url pairs instead.
+ * references, which cannot be serialised across a client boundary.
  */
-export function SocialLinks({ variant = "icon", className }: SocialLinksProps) {
+export function SocialLinks({ className }: SocialLinksProps) {
   return (
     <ul className={cn("flex flex-wrap items-center gap-1.5", className)}>
       {DATA.socials.map((social) => {
@@ -26,16 +25,12 @@ export function SocialLinks({ variant = "icon", className }: SocialLinksProps) {
         return (
           <li key={social.label}>
             <Button
-              variant={variant === "icon" ? "ghost" : "outline"}
-              size={variant === "icon" ? "icon-sm" : "default"}
-              // Base UI needs to know this renders an <a>, not a <button>.
+              variant="outline"
               nativeButton={false}
               render={<a href={href} target="_blank" rel="me noopener noreferrer" />}
-              className={variant === "icon" ? "text-muted-foreground hover:text-foreground" : undefined}
-              aria-label={variant === "icon" ? `${social.label} profile` : undefined}
             >
               <Icon aria-hidden />
-              {variant === "labelled" && <span>{social.label}</span>}
+              <span>{social.label}</span>
             </Button>
           </li>
         );

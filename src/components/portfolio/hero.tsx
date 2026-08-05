@@ -35,9 +35,7 @@ export function Hero() {
           {/*
             Routed through next/image so the source file is resized and served
             as AVIF/WebP rather than shipping the full-resolution original.
-            `priority` because this is above the fold. Grayscale by default,
-            fading to full color on hover — same trick as the organization
-            logos in OrganizationLogoLink.
+            `priority` because this is above the fold.
           */}
           <AvatarImage
             src={AVATAR_PATH}
@@ -117,7 +115,7 @@ export function Hero() {
               <span>Resume</span>
             </Button>
 
-            <SocialLinks variant="labelled" />
+            <SocialLinks />
           </div>
         </div>
       </div>

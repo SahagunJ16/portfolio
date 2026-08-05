@@ -32,12 +32,6 @@ interface SiteSidebarProps {
   fullName: string;
   /** Primary headline, shown under the name in the rail. */
   headline: string;
-  /**
-   * Rendered `SocialLinks`. Passed in as a slot rather than imported, because
-   * it reads `DATA.socials[].icon` — React component references, which cannot
-   * cross this client boundary.
-   */
-  socialLinks: React.ReactNode;
 }
 
 /**
@@ -47,7 +41,7 @@ interface SiteSidebarProps {
  * drawer. Both are driven by the same `SECTIONS` registry, so the nav list
  * exists once.
  */
-export function SiteSidebar({ monogram, fullName, headline, socialLinks }: SiteSidebarProps) {
+export function SiteSidebar({ monogram, fullName, headline }: SiteSidebarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -121,10 +115,7 @@ export function SiteSidebar({ monogram, fullName, headline, socialLinks }: SiteS
               </KbdGroup>
             </Button>
 
-            <div className="flex items-center justify-between gap-2">
-              {socialLinks}
-              <ThemeToggle />
-            </div>
+            <ThemeToggle />
           </div>
         </div>
       </aside>

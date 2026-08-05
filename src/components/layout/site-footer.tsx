@@ -1,5 +1,4 @@
 import { Container } from "@/components/layout/container";
-import { SocialLinks } from "@/components/social-links";
 import { DATA } from "@/data/data";
 import { getFullName, getPublicLocation } from "@/lib/portfolio";
 
@@ -20,12 +19,9 @@ export function SiteFooter() {
           <span className="text-xs text-muted-foreground">{getPublicLocation()}</span>
         </div>
 
-        <div className="flex flex-col gap-3 sm:items-end">
-          <SocialLinks variant="icon" className="sm:justify-end" />
-          <p className="text-xs text-muted-foreground">
-            © {year} {getFullName()}
-          </p>
-        </div>
+        <p className="text-xs text-muted-foreground">
+          © {year} {getFullName()}
+        </p>
       </Container>
     </footer>
   );

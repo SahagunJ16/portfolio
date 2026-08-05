@@ -7,7 +7,6 @@ import "./globals.css";
 import { CommandPalette } from "@/components/command-palette";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteSidebar } from "@/components/layout/site-sidebar";
-import { SocialLinks } from "@/components/social-links";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -124,16 +123,10 @@ export default function RootLayout({
               Skip to content
             </a>
 
-            {/*
-              SocialLinks is passed as a slot, not imported by the sidebar:
-              it renders `DATA.socials[].icon` component references, which
-              cannot be serialised across a client boundary.
-            */}
             <SiteSidebar
               monogram={getInitials()}
               fullName={getFullName()}
               headline={getPrimaryHeadline()}
-              socialLinks={<SocialLinks variant="icon" />}
             />
 
             {/* Clears the fixed rail, which is out of flow from `lg` up. */}
