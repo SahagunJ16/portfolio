@@ -27,7 +27,7 @@ export function SocialLinks({ variant = "icon", className }: SocialLinksProps) {
           <li key={social.label}>
             <Button
               variant={variant === "icon" ? "ghost" : "outline"}
-              size={variant === "icon" ? "icon-sm" : "sm"}
+              size={variant === "icon" ? "icon-sm" : "default"}
               // Base UI needs to know this renders an <a>, not a <button>.
               nativeButton={false}
               render={<a href={href} target="_blank" rel="me noopener noreferrer" />}
