@@ -1,11 +1,29 @@
 # Portfolio — Joshua Sahagun
 
+**Live: [joshuasahagun.com](https://joshuasahagun.com)**
+
 A personal portfolio. Modern, minimalist and monotone, built on Next.js App
 Router with shadcn/ui.
 
 Everything is rendered from a single static data file. There is no CMS, no
 database and no API — update [`src/data/data.tsx`](src/data/data.tsx) and the
 whole site follows.
+
+## Contents
+
+- [Routes](#routes)
+- [Stack](#stack)
+- [Getting started](#getting-started)
+- [Scripts](#scripts)
+- [Environment variables](#environment-variables)
+- [Assets](#assets)
+- [Editing content](#editing-content)
+- [Project structure](#project-structure)
+- [Design notes](#design-notes)
+- [Adding shadcn components](#adding-shadcn-components)
+- [Accessibility](#accessibility)
+- [SEO](#seo)
+- [Deployment](#deployment)
 
 ## Routes
 
@@ -27,7 +45,7 @@ URLs.
 | Styling | Tailwind CSS v4 (CSS-first config in `src/app/globals.css`) |
 | Components | shadcn/ui — `base-lyra` style on [Base UI](https://base-ui.com) primitives |
 | Theming | `next-themes` (light / dark / system) |
-| Icons | `lucide-react` (UI) + `react-icons` (social brands) |
+| Icons | `lucide-react` (UI) + `react-icons` (social and stack skill brand marks) |
 | Analytics | `@vercel/analytics` (only reports on Vercel deployments) |
 | Package manager | **pnpm** |
 
@@ -68,17 +86,24 @@ Set it in your hosting provider's environment settings. See
 | Path | Status | Used by |
 |---|---|---|
 | `public/images/avatar.png` | ✅ present (1600×1600) | Hero avatar, `Person` structured data |
-| `public/resume.pdf` | ⬜ not yet added | Hero **Resume** button, ⌘K palette |
+| `public/images/experiences/logos/*.png` | ✅ present (4 organizations) | Experience table + timeline avatars |
+| `public/resume.pdf` | ✅ present | Hero **Resume** button, ⌘K palette |
 
 The avatar is rendered through `next/image` at 144px (288px for 2× displays),
 so the 1.4 MB original is never sent to visitors — the browser gets a small
 resized variant. No manual downscaling needed. If the file is missing the
-avatar falls back to the initials `JS`, and the **Resume** button renders
-whether or not the PDF exists.
+avatar falls back to the initials `JS`. It renders grayscale by default,
+fading to full color on hover/focus — the same treatment organization logos
+get (see below).
 
-Both paths are defined once in [`src/lib/seo.ts`](src/lib/seo.ts) as
-`AVATAR_PATH` and `RESUME_PATH`. Change them there, not at the call sites.
-See [`public/images/README.md`](public/images/README.md) for details.
+Organization logos render inside a circular `Avatar`, falling back to the
+organization's initial letter when an entry has no `logo` set. `website` and
+`logo` are independent and both optional. See
+[`public/images/experiences/logos/README.md`](public/images/experiences/logos/README.md).
+
+`AVATAR_PATH` and `RESUME_PATH` are defined once in
+[`src/lib/seo.ts`](src/lib/seo.ts) — change them there, not at the call
+sites. See [`public/images/README.md`](public/images/README.md) for details.
 
 ## Editing content
 
@@ -110,9 +135,11 @@ required field is missing.
   and renders as *Present*, and fills that role's timeline bullet. Durations
   and the "N+ years" figure in the hero are computed at render time, so they
   never go stale.
-- **Skills** — `stack[].skills` are objects: `{ name: "React", featured: true }`.
-  The `featured` flag is the *only* thing controlling what the home page
-  summary shows. `/stack` always shows everything.
+- **Skills** — `stack[].skills` are objects:
+  `{ name: "React", featured: true, icon: SiReact }`. The `featured` flag is
+  the *only* thing controlling what the home page summary shows; `/stack`
+  always shows everything. `icon` is an optional `react-icons` component, set
+  only where a real brand/tech mark exists — not every skill has one.
 - **Adding or reordering sections** — edit `SECTIONS` in
   [`src/lib/navigation.ts`](src/lib/navigation.ts). That single array drives the
   section numbering, the sidebar nav, the scroll-spy, the ⌘K palette and the
@@ -139,12 +166,16 @@ src/
     opengraph-image.tsx   generated 1200×630 card (cascades to child routes)
     twitter-image.tsx     re-exports the OG card
     sitemap.ts robots.ts manifest.ts
+    icon.svg icon.png apple-icon.png favicon.ico
+                          file-based metadata icons, picked up automatically
     (pages)/
       experiences/        full career timeline
       stack/              full toolkit
   components/
     layout/               Container, Section, PageHeader, SiteSidebar, SiteFooter
-    portfolio/            Hero, ExperienceTimeline + one component per section
+    portfolio/            Hero, ExperienceTable (home), ExperienceTimeline
+                          (/experiences), OrganizationLogoLink + one component
+                          per section
     ui/                   shadcn components (project-owned source)
     *.tsx                 shared atoms — TagList, MetaList, DateRange, ViewAllLink, …
   data/data.tsx           ← all content
@@ -193,8 +224,9 @@ primitives), so new components arrive matching the existing ones.
 
 ## Accessibility
 
-- One `<h1>` per route. On `/`: sections are `<h2>`, organizations `<h3>`,
-  roles `<h4>`. On `/experiences`: organizations are `<h2>`, roles `<h3>`.
+- One `<h1>` per route. On `/`: sections are `<h2>`; the Experience summary is
+  a table, so it carries no heading levels of its own. On `/experiences`:
+  organizations are `<h2>`, roles are `<h3>`.
 - Skip-to-content link is the first focusable element.
 - Every date is a real `<time datetime>`.
 - Smooth scrolling is disabled under `prefers-reduced-motion`.

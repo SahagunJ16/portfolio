@@ -50,15 +50,18 @@ array. Everything that varies per role — title, location, employment, dates,
 summary, highlights — lives on the role. An organization's overall date span
 is **not** stored; `getExperienceSpan()` derives it, so it can't drift.
 
-**`stack[].skills` are objects**, `{ name, featured? }`. The `featured` flag is
-the only thing that decides what the home page summary shows; `/stack` shows
-everything.
+**`stack[].skills` are objects**, `{ name, featured?, icon? }`. The `featured`
+flag is the only thing that decides what the home page summary shows; `/stack`
+shows everything. `icon` is a `react-icons` component, set only where a real
+brand/tech icon exists — not every skill has one.
 
 ### Section registry
 
 `src/lib/navigation.ts` exports `SECTIONS`. It drives section numbering, the
 sidebar nav, the scroll-spy hook, the ⌘K palette **and the sitemap**. A section
-with a `detailHref` gets a "view all" link and a sitemap entry automatically.
+with a `detailHref` gets a "View All" link — rendered by `Section` itself in
+the header row, not by the section component — and a sitemap entry
+automatically.
 
 Adding or reordering a section means editing that array **and**
 `src/app/page.tsx` — nothing else.
@@ -109,9 +112,10 @@ nav list is declared once. The root layout offsets main and footer with
 `lg:pl-56` because the rail is out of flow.
 
 `src/components/layout/section.tsx` owns the numbered section header (mono
-label + hairline rule) that every home section uses. It is deliberately a
-single column: the section numbers moved to the sidebar, so a second sticky
-left rail here would just compete with it.
+label, hairline rule, and the "View All" link for sections with a
+`detailHref`) that every home section uses. It is deliberately a single
+column: the section numbers moved to the sidebar, so a second sticky left
+rail here would just compete with it.
 
 `Container` is the one shared measure for main, footer and the detail pages.
 
@@ -119,8 +123,12 @@ left rail here would just compete with it.
 
 Before writing a new component, check `src/components/` — `TagList`,
 `MetaList`, `DateRange`, `SocialLinks`, `CopyButton`, `ViewAllLink`,
-`PageHeader` and `ExperienceTimeline` already exist. The timeline serves both
-the home summary (`expandable={false}`) and `/experiences`; don't fork it.
+`PageHeader`, `ExperienceTable`, `ExperienceTimeline` and
+`OrganizationLogoLink` already exist. The home page's Experience summary is
+`ExperienceTable`; `ExperienceTimeline` (organization rail + per-role
+accordion) is used only by `/experiences` — they're separate components, not
+one shared with a prop switch. `OrganizationLogoLink` (an `Avatar` with an
+initials fallback, optionally linked to the org's site) backs both.
 Formatting helpers live in `src/lib/format.ts`; never format a date inline.
 
 ### Privacy
