@@ -21,7 +21,10 @@ export function TagList({ items, variant = "outline", className, label }: TagLis
     <ul aria-label={label} className={cn("flex flex-wrap gap-1.5", className)}>
       {items.map((item) => (
         <li key={item.name}>
-          <Badge variant={variant} className="font-mono font-normal tracking-tight">
+          <Badge
+            variant={variant}
+            className="h-6 gap-1.5 font-mono font-normal tracking-tight"
+          >
             {item.icon && <item.icon aria-hidden data-icon="inline-start" />}
             {item.name}
           </Badge>
