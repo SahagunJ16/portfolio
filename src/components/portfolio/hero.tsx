@@ -31,7 +31,7 @@ export function Hero() {
           over the sizing below. Left at the default, tailwind-merge resolves
           these normally.
         */}
-        <Avatar className="group size-28 shrink-0 sm:size-36">
+        <Avatar className="size-28 shrink-0 sm:size-36">
           {/*
             Routed through next/image so the source file is resized and served
             as AVIF/WebP rather than shipping the full-resolution original.
@@ -49,7 +49,7 @@ export function Hero() {
                 priority
               />
             }
-            className="bg-background grayscale transition-[filter] duration-200 group-hover:grayscale-0"
+            className="bg-background"
           />
 
           <AvatarFallback className="bg-background font-heading text-4xl">
