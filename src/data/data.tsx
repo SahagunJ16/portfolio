@@ -18,6 +18,7 @@ import {
   SiGithubcopilot,
   SiGnubash,
   SiGooglegemini,
+  SiHackerrank,
   SiHtml5,
   SiJavascript,
   SiLaravel,
@@ -135,6 +136,8 @@ export interface StackCategory {
 export interface Certification {
   name: string;
   issuer: string;
+  /** Monotone brand icon for the issuer, when a real one exists in react-icons. Falls back to a generic badge icon. */
+  issuerIcon?: IconType;
   issueDate: MonthYear;
   /** `null` means the credential does not expire. */
   expirationDate: MonthYear | null;
@@ -545,6 +548,7 @@ export const DATA = {
         {
           name: "Software Engineer Certification",
           issuer: "HackerRank",
+          issuerIcon: SiHackerrank,
           issueDate: {
             month: 8,
             year: 2026,
