@@ -7,31 +7,38 @@ interface ViewAllLinkProps {
   href: string;
   /** How many items the destination holds, shown as a muted tally. */
   count?: number;
+  /**
+   * Accessible name, e.g. "All experiences" — the visible text is always the
+   * literal "View All", so this is what keeps two instances on the same page
+   * distinguishable to assistive tech (and matches the ⌘K palette's label).
+   */
+  "aria-label": string;
   children: React.ReactNode;
 }
 
 /**
- * The link from a home page summary through to its full detail route. Shared
- * by the Experience and Stack sections so the two stay identical — including
- * the `nativeButton={false}` that Base UI needs when a Button renders an
- * anchor.
+ * The link from a section header through to its full detail route. Rendered
+ * by `Section` itself for any section with a detail route, so Experience and
+ * Stack stay identical — including the `nativeButton={false}` that Base UI
+ * needs when a Button renders an anchor.
  */
-export function ViewAllLink({ href, count, children }: ViewAllLinkProps) {
+export function ViewAllLink({ href, count, children, ...rest }: ViewAllLinkProps) {
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="sm"
       nativeButton={false}
       render={<Link href={href} />}
-      className="group self-start"
+      className="label-mono group shrink-0 gap-1.5"
+      {...rest}
     >
       <span>{children}</span>
       {count !== undefined && (
-        <span className="font-mono text-muted-foreground">({count})</span>
+        <span className="text-muted-foreground/70">({count})</span>
       )}
       <ArrowRightIcon
         aria-hidden
-        className="transition-transform group-hover:translate-x-0.5"
+        className="size-3 transition-transform group-hover:translate-x-0.5"
       />
     </Button>
   );

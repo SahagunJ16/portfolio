@@ -1,6 +1,7 @@
 import { Container } from "@/components/layout/container";
+import { ViewAllLink } from "@/components/view-all-link";
 import { formatIndex } from "@/lib/format";
-import { getSectionIndex, type SectionId } from "@/lib/navigation";
+import { getSectionDetail, getSectionIndex, type SectionId } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 
 interface SectionProps {
@@ -9,6 +10,8 @@ interface SectionProps {
   label: string;
   /** Optional one-line standfirst under the heading. */
   description?: string;
+  /** Tally shown next to "View All", e.g. total roles or total skills. Ignored when the section has no detail route. */
+  viewAllCount?: number;
   children: React.ReactNode;
   className?: string;
 }
@@ -16,14 +19,23 @@ interface SectionProps {
 /**
  * The editorial index shell every section on the page uses.
  *
- * A single column headed by a numbered mono label and a hairline rule that
- * runs to the measure's edge. The section number used to live in a sticky
- * left rail; that moved to the fixed site sidebar, so keeping a second rail
- * here would just be two competing left margins.
+ * A single column headed by a numbered mono label, a hairline rule, and — for
+ * sections with a detail route — a right-aligned "View All" link. The section
+ * number used to live in a sticky left rail; that moved to the fixed site
+ * sidebar, so keeping a second rail here would just be two competing left
+ * margins.
  */
-export function Section({ id, label, description, children, className }: SectionProps) {
+export function Section({
+  id,
+  label,
+  description,
+  viewAllCount,
+  children,
+  className,
+}: SectionProps) {
   const headingId = `${id}-heading`;
   const index = getSectionIndex(id);
+  const detail = getSectionDetail(id);
 
   return (
     <section
@@ -34,7 +46,7 @@ export function Section({ id, label, description, children, className }: Section
       className={cn("border-t border-border", className)}
     >
       <Container className="py-14 sm:py-20">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <span className="label-mono" aria-hidden>
             {formatIndex(index)}
           </span>
@@ -44,7 +56,13 @@ export function Section({ id, label, description, children, className }: Section
           >
             {label}
           </h2>
-          <span aria-hidden className="h-px flex-1 bg-border" />
+          <span aria-hidden className="h-px min-w-8 flex-1 bg-border" />
+
+          {detail && (
+            <ViewAllLink href={detail.href} count={viewAllCount} aria-label={detail.label}>
+              View All
+            </ViewAllLink>
+          )}
         </div>
 
         {description && (

@@ -19,8 +19,11 @@ export interface SectionDefinition {
    */
   detailHref?: string;
   /**
-   * Wording for the link to that page. Spelled out rather than derived from
-   * `label`, because "All " + "Experience" doesn't read as English.
+   * Accessible name for the section header's "View All" link, and the label
+   * shown in the ⌘K palette's "Pages" group. The link's *visible* text is
+   * always the literal "View All" — this exists because that text is
+   * intentionally generic, and two "View All" palette rows would otherwise
+   * be indistinguishable.
    */
   detailLabel?: string;
 }

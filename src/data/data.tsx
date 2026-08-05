@@ -81,6 +81,8 @@ export interface Skill {
   name: string;
   /** Surfaced in the home page stack summary. Everything shows on /stack. */
   featured?: boolean;
+  /** Monotone tech/brand icon, when a real one exists in react-icons. Renders via currentColor — no extra styling needed to stay on-theme. */
+  icon?: IconType;
 }
 
 export interface StackCategory {
