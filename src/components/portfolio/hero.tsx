@@ -31,11 +31,13 @@ export function Hero() {
           over the sizing below. Left at the default, tailwind-merge resolves
           these normally.
         */}
-        <Avatar className="size-28 shrink-0 sm:size-36">
+        <Avatar className="group size-28 shrink-0 sm:size-36">
           {/*
             Routed through next/image so the source file is resized and served
             as AVIF/WebP rather than shipping the full-resolution original.
-            `priority` because this is above the fold.
+            `priority` because this is above the fold. Grayscale by default,
+            fading to full color on hover — same trick as the organization
+            logos in OrganizationLogoLink.
           */}
           <AvatarImage
             src={AVATAR_PATH}
@@ -49,8 +51,12 @@ export function Hero() {
                 priority
               />
             }
+            className="grayscale transition-[filter] duration-200 group-hover:grayscale-0"
           />
-          <AvatarFallback className="font-heading text-4xl">{getInitials()}</AvatarFallback>
+
+          <AvatarFallback className="font-heading text-4xl">
+            {getInitials()}
+          </AvatarFallback>
         </Avatar>
 
         <div className="flex min-w-0 flex-col gap-5">
@@ -88,7 +94,10 @@ export function Hero() {
 
           <div className="flex flex-wrap items-center gap-2">
             {/* nativeButton={false}: Base UI needs to know this renders an <a>, not a <button>. */}
-            <Button nativeButton={false} render={<a href={`mailto:${DATA.contact.email}`} />}>
+            <Button
+              nativeButton={false}
+              render={<a href={`mailto:${DATA.contact.email}`} />}
+            >
               <MailIcon aria-hidden />
               <span>Get in touch</span>
             </Button>
@@ -96,7 +105,13 @@ export function Hero() {
             <Button
               variant="outline"
               nativeButton={false}
-              render={<a href={RESUME_PATH} target="_blank" rel="noopener noreferrer" />}
+              render={
+                <a
+                  href={RESUME_PATH}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              }
             >
               <FileTextIcon aria-hidden />
               <span>Resume</span>

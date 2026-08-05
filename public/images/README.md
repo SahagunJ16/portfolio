@@ -22,12 +22,15 @@ constant if the name or extension changes.
 - Keep it **square** — the avatar is a circle and anything else is centre-cropped.
 - If the file is missing, the avatar falls back to the initials `JS` and the
   build still succeeds.
+- Rendered grayscale by default, fading to full color on hover/focus — same
+  CSS-filter trick as the organization logos (see
+  [`experiences/logos/README.md`](experiences/logos/README.md)). No second
+  file needed.
 
 ## Other slots
 
 - `public/resume.pdf` — linked from the hero **Resume** button and the ⌘K
-  palette. Defined as `RESUME_PATH` in `src/lib/seo.ts`. Not yet present; the
-  button renders regardless.
+  palette. Defined as `RESUME_PATH` in `src/lib/seo.ts`.
 
 ## Note
 
