@@ -1,8 +1,9 @@
 import { Badge } from "@/components/ui/badge";
+import type { Skill } from "@/data/data";
 import { cn } from "@/lib/utils";
 
 interface TagListProps {
-  items: readonly string[];
+  items: readonly Skill[];
   variant?: React.ComponentProps<typeof Badge>["variant"];
   className?: string;
   /** Accessible name for the list, e.g. "Languages". */
@@ -19,9 +20,10 @@ export function TagList({ items, variant = "outline", className, label }: TagLis
   return (
     <ul aria-label={label} className={cn("flex flex-wrap gap-1.5", className)}>
       {items.map((item) => (
-        <li key={item}>
+        <li key={item.name}>
           <Badge variant={variant} className="font-mono font-normal tracking-tight">
-            {item}
+            {item.icon && <item.icon aria-hidden data-icon="inline-start" />}
+            {item.name}
           </Badge>
         </li>
       ))}

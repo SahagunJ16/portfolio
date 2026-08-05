@@ -50,11 +50,7 @@ export default function StackPage() {
                   </span>
                   <h2 className="label-mono text-foreground">{category.category}</h2>
                 </div>
-                <TagList
-                  items={category.skills.map((skill) => skill.name)}
-                  label={category.category}
-                  className="gap-2"
-                />
+                <TagList items={category.skills} label={category.category} className="gap-2" />
               </li>
             ))}
           </ul>

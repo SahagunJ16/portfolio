@@ -17,11 +17,7 @@ export function StackSection() {
       description="What I reach for most. The full toolkit is a click away."
       viewAllCount={total}
     >
-      <TagList
-        items={featured.map((skill) => skill.name)}
-        label="Core technologies"
-        className="gap-2"
-      />
+      <TagList items={featured} label="Core technologies" className="gap-2" />
     </Section>
   );
 }
