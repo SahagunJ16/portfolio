@@ -29,9 +29,10 @@ whole site follows.
 
 | Route | What it holds |
 |---|---|
-| `/` | Hero and five sections. Experience and Stack are summaries |
+| `/` | Hero and six sections. Experience, Stack and Certifications are summaries |
 | `/experiences` | Every role, expandable, on a career timeline |
 | `/stack` | Every category and skill |
+| `/certifications` | Every certification, grouped by category |
 
 The detail pages live in the `(pages)/` route group, which doesn't affect their
 URLs.
@@ -140,6 +141,12 @@ required field is missing.
   the *only* thing controlling what the home page summary shows; `/stack`
   always shows everything. `icon` is an optional `react-icons` component, set
   only where a real brand/tech mark exists — not every skill has one.
+- **Certifications** — `certifications` is grouped like `stack`:
+  `{ category: string, certifications: Certification[] }`. There's no
+  `featured` flag — the home summary lists every certification (flat, newest
+  data order); only `/certifications` groups them by category. A
+  certification's `skills` are plain strings (the issuer's own tags), not a
+  reference into `stack`.
 - **Adding or reordering sections** — edit `SECTIONS` in
   [`src/lib/navigation.ts`](src/lib/navigation.ts). That single array drives the
   section numbering, the sidebar nav, the scroll-spy, the ⌘K palette and the
@@ -171,6 +178,7 @@ src/
     (pages)/
       experiences/        full career timeline
       stack/              full toolkit
+      certifications/     full credential list, grouped by category
   components/
     layout/               Container, Section, PageHeader, SiteSidebar, SiteFooter
     portfolio/            Hero, ExperienceTable (home), ExperienceTimeline
@@ -191,16 +199,19 @@ Only the interactive leaves are `"use client"`: `theme-toggle`,
 need it.
 
 > `DATA.socials[].icon` holds React **component references**, so `DATA` must not
-> be passed wholesale into a client component. `SocialLinks` stays server-side
-> and is handed *into* the client `SiteSidebar` as an already-rendered slot
-> prop; the ⌘K palette receives plain `{ label, url }` pairs instead.
+> be passed wholesale into a client component. `SocialLinks` (shown only in
+> the hero, a Server Component) is unaffected; the ⌘K palette, which is
+> `"use client"`, receives plain `{ label, url }` pairs instead of the
+> component itself.
 
 ## Design notes
 
 - **Navigation** — a fixed left rail from `lg` up (monogram, numbered sections
-  with an active indicator, ⌘K, theme, socials); a sticky top bar with a drawer
-  below that. Both come from one component,
+  with an active indicator, ⌘K, theme); a sticky top bar with a drawer below
+  that. Both come from one component,
   `src/components/layout/site-sidebar.tsx`, so the nav list is declared once.
+- **Socials** — shown once, in the hero, rather than repeated in the sidebar,
+  footer and contact section. `src/components/social-links.tsx`.
 - **Layout** — one measure (`max-w-4xl`) shared by main, footer and the detail
   pages, offset by the rail with `lg:pl-56`. Each section is headed by a
   numbered mono label and a hairline rule, defined once in

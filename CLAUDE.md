@@ -30,9 +30,10 @@ framework — don't add one without asking.
 
 | Route | What it holds |
 |---|---|
-| `/` | Hero + five sections. Experience and Stack are **summaries only** |
+| `/` | Hero + six sections. Experience, Stack and Certifications are **summaries only** |
 | `/experiences` | Every role, expandable |
 | `/stack` | Every category, every skill |
+| `/certifications` | Every certification, grouped by category |
 
 The two detail pages live in the `(pages)/` route group, which doesn't affect
 their URLs.
@@ -54,6 +55,13 @@ is **not** stored; `getExperienceSpan()` derives it, so it can't drift.
 flag is the only thing that decides what the home page summary shows; `/stack`
 shows everything. `icon` is a `react-icons` component, set only where a real
 brand/tech icon exists — not every skill has one.
+
+**`certifications` is grouped like `stack`** — `CertificationCategory[]`, each
+holding a `certifications` array. Unlike `stack`, there's no `featured` flag:
+the home summary shows every certification (flat, uncategorized); only
+`/certifications` groups them by category. `skills` on a certification are
+plain strings (the issuer's own competency tags), not a reference into
+`stack` — the two lists overlap in places but aren't the same vocabulary.
 
 ### Section registry
 
@@ -79,9 +87,10 @@ it that way. Only these are `"use client"`: `theme-toggle`, `command-palette`,
 `copy-button`, `site-sidebar`, and shadcn primitives that require it.
 
 > **`DATA.socials[].icon` holds React component references.** Passing `DATA`
-> into a client component will fail to serialize. `SocialLinks` is therefore
-> server-only and is passed *into* `SiteSidebar` as a rendered slot prop; the
-> ⌘K palette gets plain `{ label, url }` pairs.
+> into a client component will fail to serialize. `SocialLinks` is shown only
+> in the hero (a Server Component, so this is a non-issue there); the ⌘K
+> palette, which is `"use client"`, gets plain `{ label, url }` pairs instead
+> of the component itself.
 
 ### Base UI, not Radix
 
