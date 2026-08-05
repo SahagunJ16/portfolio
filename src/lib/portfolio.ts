@@ -61,6 +61,26 @@ export function getLatestRole(experience: Experience): ExperienceRole {
   );
 }
 
+export interface ExperienceSummary {
+  experience: Experience;
+  latestRole: ExperienceRole;
+  span: ExperienceSpan;
+}
+
+/**
+ * One row per organization — the home page summary table: latest role's
+ * title, but the full tenure's date span.
+ */
+export function getExperienceSummaries(
+  experiences: readonly Experience[]
+): ExperienceSummary[] {
+  return experiences.map((experience) => ({
+    experience,
+    latestRole: getLatestRole(experience),
+    span: getExperienceSpan(experience),
+  }));
+}
+
 /** Every role across every organization, flattened, newest organization first. */
 export function getAllRoles(): RoleWithOrganization[] {
   return DATA.experiences.flatMap((experience) =>

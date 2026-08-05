@@ -58,6 +58,10 @@ export interface ExperienceRole {
  */
 export interface Experience {
   organization: string;
+  /** Organization website, e.g. "https://example.com". Renders as plain text when absent. */
+  website?: string;
+  /** Filename under public/images/experiences/logos/, e.g. "example.png". Shown as an Avatar with an initials fallback when absent. */
+  logo?: string;
   /** Newest first. */
   roles: ExperienceRole[];
 }
@@ -134,6 +138,8 @@ export const DATA = {
   experiences: [
     {
       organization: "MC Security Co., Ltd.",
+      website: "https://www.mcsecurity.co.jp",
+      logo: "mc-security.png",
       roles: [
         {
           title: "System Engineer",
@@ -189,6 +195,9 @@ export const DATA = {
     },
     {
       organization: "Collins Aerospace",
+      website:
+        "https://www.rtx.com/collinsaerospace/who-we-are/about-us/global/asia/philippines",
+      logo: "collins-aerospace.png",
       roles: [
         {
           title: "Business System Analyst III",
@@ -265,6 +274,8 @@ export const DATA = {
     },
     {
       organization: "Kinpo Electronics (Philippines), Inc.",
+      website: "https://www.kinpogroup.com/en-US/",
+      logo: "kinpo-electronics.png",
       roles: [
         {
           title: "Software Engineer II",
@@ -320,6 +331,8 @@ export const DATA = {
     },
     {
       organization: "Nexperia",
+      website: "https://www.nexperia.com",
+      logo: "nexperia.png",
       roles: [
         {
           title: "Junior Software Engineer",
