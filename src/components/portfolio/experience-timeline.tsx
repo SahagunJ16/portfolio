@@ -1,4 +1,5 @@
 import { DateRange } from "@/components/date-range";
+import { OrganizationLogoLink } from "@/components/portfolio/organization-logo-link";
 import {
   Accordion,
   AccordionContent,
@@ -7,7 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import type { Experience, ExperienceRole } from "@/data/data";
-import { getExperienceSpan, getLatestRole } from "@/lib/portfolio";
+import { getExperienceSpan } from "@/lib/portfolio";
 import { cn } from "@/lib/utils";
 
 /**
@@ -31,63 +32,54 @@ const TIMELINE_ROW =
 
 interface ExperienceTimelineProps {
   experiences: readonly Experience[];
-  /**
-   * `false` shows only the newest role per organization as a static row — the
-   * home page summary. `true` lists every role behind a disclosure.
-   */
-  expandable?: boolean;
-  /** Heading tag for the organization name; roles take the next level down. */
-  headingLevel?: "h2" | "h3";
 }
 
 /**
- * Career timeline: one block per organization, its roles strung along a
- * vertical rule with a bullet each. The current role's bullet is filled.
+ * Career timeline: an outer rail of organizations (bullet = avatar), each
+ * with its roles strung along their own inner rule with a small bullet each.
+ * The current role's bullet is filled.
  *
  * Composed from the shadcn `Accordion` and `Badge` rather than a bespoke
  * disclosure — shadcn/ui ships no timeline component, so the structure here is
  * custom but nothing interactive is reinvented.
  */
-export function ExperienceTimeline({
-  experiences,
-  expandable = true,
-  headingLevel = "h3",
-}: ExperienceTimelineProps) {
-  const OrganizationHeading = headingLevel;
-  const roleHeadingLevel = headingLevel === "h2" ? "h3" : "h4";
-  const RoleHeading = roleHeadingLevel;
-
+export function ExperienceTimeline({ experiences }: ExperienceTimelineProps) {
   return (
-    <div className="flex flex-col gap-12 sm:gap-14">
-      {experiences.map((experience) => {
+    <ul aria-label="Career timeline" className="flex flex-col">
+      {experiences.map((experience, index) => {
         const span = getExperienceSpan(experience);
-        const roles = expandable ? experience.roles : [getLatestRole(experience)];
+        const isLast = index === experiences.length - 1;
 
         return (
-          <article key={experience.organization} className="flex flex-col gap-4">
-            <header className="flex flex-col gap-1.5">
-              <OrganizationHeading className="font-heading text-xl tracking-tight text-pretty text-foreground">
-                {experience.organization}
-              </OrganizationHeading>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                <DateRange start={span.start} end={span.end} />
-                <span aria-hidden className="text-border">
-                  /
-                </span>
-                <span className="label-mono">{roles[0].location.address}</span>
-              </div>
-            </header>
+          <li key={experience.organization} className="flex gap-4 sm:gap-5">
+            <div className="flex flex-col items-center">
+              <OrganizationLogoLink experience={experience} size="lg" />
+              {!isLast && <span aria-hidden className="my-2 w-px flex-1 bg-border" />}
+            </div>
 
-            {expandable ? (
-              // render={<ul />}: the Base UI root is a <div> by default, which
-              // can't legally contain the <li> rows.
+            <div className="min-w-0 flex-1 pb-12 sm:pb-14">
+              <header className="flex flex-col gap-1.5">
+                <h2 className="font-heading text-xl tracking-tight text-pretty text-foreground">
+                  {experience.organization}
+                </h2>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <DateRange start={span.start} end={span.end} />
+                  <span aria-hidden className="text-border">
+                    /
+                  </span>
+                  <span className="label-mono">{experience.roles[0].location.address}</span>
+                </div>
+              </header>
+
+              {/* render={<ul />}: the Base UI root is a <div> by default, which
+                  can't legally contain the <li> rows. */}
               <Accordion
                 multiple
                 render={<ul />}
                 aria-label={`Roles at ${experience.organization}`}
-                className={TIMELINE_LIST}
+                className={cn(TIMELINE_LIST, "mt-4")}
               >
-                {roles.map((role) => (
+                {experience.roles.map((role) => (
                   <AccordionItem
                     key={roleKey(role)}
                     value={roleKey(role)}
@@ -97,7 +89,7 @@ export function ExperienceTimeline({
                     <Bullet isCurrent={role.end === null} />
 
                     <AccordionTrigger
-                      headingLevel={roleHeadingLevel}
+                      headingLevel="h3"
                       className="gap-4 py-2.5 hover:no-underline"
                     >
                       <span className="flex min-w-0 flex-1 flex-col items-start gap-2 pr-2">
@@ -114,25 +106,11 @@ export function ExperienceTimeline({
                   </AccordionItem>
                 ))}
               </Accordion>
-            ) : (
-              <ul className={TIMELINE_LIST}>
-                {roles.map((role) => (
-                  <li key={roleKey(role)} className={TIMELINE_ROW}>
-                    <Bullet isCurrent={role.end === null} />
-                    <div className="flex flex-col items-start gap-2 py-2.5">
-                      <RoleHeading className="font-heading text-base leading-snug text-pretty text-foreground">
-                        {role.title}
-                      </RoleHeading>
-                      <RoleMeta role={role} />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </article>
+            </div>
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 }
 

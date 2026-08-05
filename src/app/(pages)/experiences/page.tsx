@@ -41,7 +41,7 @@ export default function ExperiencesPage() {
       {/* Divider is full-bleed, matching how <Section> separates the home page. */}
       <div className="border-t border-border">
         <Container className="py-12 sm:py-16">
-          <ExperienceTimeline experiences={DATA.experiences} headingLevel="h2" />
+          <ExperienceTimeline experiences={DATA.experiences} />
         </Container>
       </div>
 
