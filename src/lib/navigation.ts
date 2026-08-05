@@ -61,6 +61,13 @@ export const SECTIONS = [
     detailLabel: undefined,
   },
   {
+    id: "certifications",
+    label: "Certifications",
+    hint: "Credentials and certifications",
+    detailHref: "/certifications",
+    detailLabel: "All certifications",
+  },
+  {
     id: "contact",
     label: "Contact",
     hint: "How to reach me",

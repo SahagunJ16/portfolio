@@ -1,5 +1,6 @@
 import {
   DATA,
+  type Certification,
   type Experience,
   type ExperienceRole,
   type MonthYear,
@@ -150,4 +151,9 @@ export function getAllSkills(): string[] {
 /** The organizations worked at, most recent first. */
 export function getOrganizations(): string[] {
   return DATA.experiences.map((experience) => experience.organization);
+}
+
+/** Every certification across all categories, in data order. */
+export function getAllCertifications(): Certification[] {
+  return DATA.certifications.flatMap((category) => category.certifications);
 }

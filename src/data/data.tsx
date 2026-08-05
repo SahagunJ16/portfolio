@@ -132,6 +132,23 @@ export interface StackCategory {
   skills: Skill[];
 }
 
+export interface Certification {
+  name: string;
+  issuer: string;
+  issueDate: MonthYear;
+  /** `null` means the credential does not expire. */
+  expirationDate: MonthYear | null;
+  credentialId: string;
+  credentialUrl: string;
+  /** Competencies the issuer associates with this credential. */
+  skills: string[];
+}
+
+export interface CertificationCategory {
+  category: string;
+  certifications: Certification[];
+}
+
 export interface PortfolioData {
   profile: Profile;
   contact: Contact;
@@ -140,6 +157,7 @@ export interface PortfolioData {
   experiences: Experience[];
   educations: Education[];
   stack: StackCategory[];
+  certifications: CertificationCategory[];
 }
 
 export const DATA = {
@@ -517,6 +535,34 @@ export const DATA = {
         { name: "ESLint", icon: SiEslint },
         { name: "Prettier", icon: SiPrettier },
         { name: "Turborepo", icon: SiTurborepo },
+      ],
+    },
+  ],
+  certifications: [
+    {
+      category: "Software Engineering",
+      certifications: [
+        {
+          name: "Software Engineer Certification",
+          issuer: "HackerRank",
+          issueDate: {
+            month: 8,
+            year: 2026,
+          },
+          expirationDate: null,
+          credentialId: "4FC0B8CF9274",
+          credentialUrl: "https://www.hackerrank.com/certificates/4fc0b8cf9274",
+          skills: [
+            "Software Engineering",
+            "C#",
+            "JavaScript",
+            "TypeScript",
+            "SQL",
+            "REST APIs",
+            "Problem Solving",
+            "Data Analysis",
+          ],
+        },
       ],
     },
   ],

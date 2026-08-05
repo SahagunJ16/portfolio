@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { JsonLd } from "@/components/json-ld";
+import { CertificationsSection } from "@/components/portfolio/certifications-section";
 import { ContactSection } from "@/components/portfolio/contact-section";
 import { EducationSection } from "@/components/portfolio/education-section";
 import { ExperienceSection } from "@/components/portfolio/experience-section";
@@ -31,6 +32,7 @@ export default function Home() {
       <ExperienceSection />
       <StackSection />
       <EducationSection />
+      <CertificationsSection />
       <ContactSection />
 
       <JsonLd data={buildJsonLdGraph()} id="profile-schema" />
