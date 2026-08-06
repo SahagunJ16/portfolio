@@ -9,7 +9,6 @@
 export interface SectionDefinition {
   /** DOM id and anchor target on the home page. */
   id: string;
-  /** Displayed heading, e.g. "Overview". */
   label: string;
   /** Short description used by the command palette. */
   hint: string;

@@ -98,7 +98,6 @@ export function buildProfilePageSchema() {
   };
 }
 
-/** Combined home page graph, ready to be serialised into one ld+json script. */
 export function buildJsonLdGraph() {
   return {
     "@context": "https://schema.org",
