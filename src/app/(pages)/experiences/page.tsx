@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/json-ld";
 import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { ExperienceTimeline } from "@/components/portfolio/experience-timeline";
-import { DATA } from "@/data/data";
+import { DATA } from "@/data";
 import { buildBreadcrumbGraph } from "@/lib/json-ld";
 import { getSectionIndex } from "@/lib/navigation";
 import { getYearsOfExperience } from "@/lib/portfolio";

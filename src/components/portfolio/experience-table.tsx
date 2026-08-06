@@ -1,7 +1,7 @@
 import { DateRange } from "@/components/date-range";
 import { OrganizationLogoLink } from "@/components/portfolio/organization-logo-link";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import type { Experience } from "@/data/data";
+import type { Experience } from "@/data";
 import { getExperienceSummaries } from "@/lib/portfolio";
 
 interface ExperienceTableProps {
@@ -36,7 +36,7 @@ export function ExperienceTable({ experiences }: ExperienceTableProps) {
                 <TableCell className="py-3 whitespace-normal text-foreground">
                   {latestRole.title}
                 </TableCell>
-                <TableCell className="py-3 pr-0">
+                <TableCell className="py-3 pr-0 text-end">
                   {/*
                     flex-nowrap: DateRange's own layout is `flex flex-wrap`,
                     which stacks "Apr 2025 / – / Present" onto separate lines

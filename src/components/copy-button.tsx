@@ -15,7 +15,6 @@ interface CopyButtonProps {
   className?: string;
 }
 
-/** Icon button that copies `value` and confirms with a toast. */
 export function CopyButton({ value, label, className }: CopyButtonProps) {
   const { copied, copy } = useCopyToClipboard();
 

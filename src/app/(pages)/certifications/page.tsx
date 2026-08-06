@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/json-ld";
 import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { CertificationCard } from "@/components/portfolio/certification-card";
-import { DATA } from "@/data/data";
+import { DATA } from "@/data";
 import { formatIndex } from "@/lib/format";
 import { buildBreadcrumbGraph } from "@/lib/json-ld";
 import { getSectionIndex } from "@/lib/navigation";

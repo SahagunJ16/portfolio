@@ -1,4 +1,4 @@
-import { DATA } from "@/data/data";
+import { DATA } from "@/data";
 import { toIsoMonth, toExternalUrl } from "@/lib/format";
 import {
   getAllRoles,
@@ -98,7 +98,6 @@ export function buildProfilePageSchema() {
   };
 }
 
-/** Combined home page graph, ready to be serialised into one ld+json script. */
 export function buildJsonLdGraph() {
   return {
     "@context": "https://schema.org",

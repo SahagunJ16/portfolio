@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import type { Experience } from "@/data/data";
+import type { Experience } from "@/data";
 import { toExternalUrl } from "@/lib/format";
 import { cn } from "@/lib/utils";
 

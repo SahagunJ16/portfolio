@@ -1,6 +1,6 @@
 import { Section } from "@/components/layout/section";
 import { ExperienceTable } from "@/components/portfolio/experience-table";
-import { DATA } from "@/data/data";
+import { DATA } from "@/data";
 
 /**
  * Home page summary: the current role at each organization, as a table. The

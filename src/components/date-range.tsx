@@ -1,4 +1,4 @@
-import type { MonthYear } from "@/data/data";
+import type { MonthYear } from "@/data";
 import {
   DATE_RANGE_SEPARATOR,
   formatDuration,

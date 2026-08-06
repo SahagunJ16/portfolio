@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 
 interface SectionProps {
   id: SectionId;
-  /** Heading text, e.g. "Experience". */
   label: string;
   /** Optional one-line standfirst under the heading. */
   description?: string;

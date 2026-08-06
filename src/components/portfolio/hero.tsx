@@ -5,7 +5,7 @@ import { Container } from "@/components/layout/container";
 import { SocialLinks } from "@/components/social-links";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { DATA } from "@/data/data";
+import { DATA } from "@/data";
 import {
   getFullName,
   getInitials,

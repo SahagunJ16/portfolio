@@ -5,7 +5,7 @@ import {
   type ExperienceRole,
   type MonthYear,
   type Skill,
-} from "@/data/data";
+} from "@/data";
 import { monthsBetween } from "@/lib/format";
 
 /** Overall dates an organization was worked at, derived from its roles. */
@@ -15,7 +15,6 @@ export interface ExperienceSpan {
   end: MonthYear | null;
 }
 
-/** A role paired with the organization it was held at. */
 export interface RoleWithOrganization {
   organization: string;
   role: ExperienceRole;
@@ -89,7 +88,6 @@ export function getAllRoles(): RoleWithOrganization[] {
   );
 }
 
-/** The role currently held, if any. */
 export function getCurrentRole(): RoleWithOrganization | undefined {
   return getAllRoles().find((entry) => entry.role.end === null);
 }
@@ -141,19 +139,16 @@ export function getFeaturedSkills(): Skill[] {
   );
 }
 
-/** Every skill name across all categories, de-duplicated. */
 export function getAllSkills(): string[] {
   return [
     ...new Set(DATA.stack.flatMap((category) => category.skills.map((skill) => skill.name))),
   ];
 }
 
-/** The organizations worked at, most recent first. */
 export function getOrganizations(): string[] {
   return DATA.experiences.map((experience) => experience.organization);
 }
 
-/** Every certification across all categories, in data order. */
 export function getAllCertifications(): Certification[] {
   return DATA.certifications.flatMap((category) => category.certifications);
 }

@@ -42,9 +42,23 @@ their URLs.
 
 ### Content lives in one place
 
-All copy is in `src/data/data.tsx`. Never hardcode names, dates, job titles or
-skills into components. If something needs to change on the page, change the
-data.
+All copy is in `src/data/`, **one file per top-level key** — `profile.ts`,
+`contact.ts`, `socials.ts`, `overview.ts`, `experiences.ts`, `educations.ts`,
+`stack.ts`, `certifications.ts` — so the directory listing is the shape of
+`PortfolioData`. Never hardcode names, dates, job titles or skills into
+components. If something needs to change on the page, change the data.
+
+- `src/data/types.ts` holds every type. **Fragment files import from `./types`
+  only** — never from `./index` or `@/data`, which is the one shape that could
+  create a cycle.
+- `src/data/index.ts` composes the fragments into `DATA satisfies
+  PortfolioData`. Consumers import `DATA` (and types) from `@/data`; the barrel
+  exports no fragment by name. Deep-import a fragment only to stay clear of the
+  icon-bearing modules across a client boundary, and say so in a comment.
+- Every fragment ends in `satisfies <Type>`, **never** a `: Type` annotation —
+  an annotation silently widens the literal and drops excess-property checking.
+  `as const satisfies` doesn't compile here (`readonly string[]` vs
+  `string[]`).
 
 **`experiences` is nested**: an entry is an *organization* with a `roles`
 array. Everything that varies per role — title, location, employment, dates,

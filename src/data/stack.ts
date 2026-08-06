@@ -1,0 +1,140 @@
+import { DiMsqlServer } from "react-icons/di";
+import { FaJava } from "react-icons/fa6";
+import { RiOpenaiFill } from "react-icons/ri";
+import {
+  SiBootstrap,
+  SiClaudecode,
+  SiCplusplus,
+  SiCss,
+  SiCursor,
+  SiDocker,
+  SiDotnet,
+  SiEslint,
+  SiGit,
+  SiGithub,
+  SiGithubactions,
+  SiGithubcopilot,
+  SiGnubash,
+  SiGooglegemini,
+  SiHtml5,
+  SiJavascript,
+  SiLaravel,
+  SiModelcontextprotocol,
+  SiMysql,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiNpm,
+  SiPhp,
+  SiPnpm,
+  SiPostgresql,
+  SiPrettier,
+  SiReact,
+  SiRuby,
+  SiRubyonrails,
+  SiShadcnui,
+  SiSupabase,
+  SiTailwindcss,
+  SiTurborepo,
+  SiTypescript,
+  SiVercel,
+  SiVite,
+} from "react-icons/si";
+import { TbBrandCSharp, TbBrandVscode } from "react-icons/tb";
+
+import type { StackCategory } from "./types";
+
+export const stack = [
+  {
+    category: "Languages",
+    skills: [
+      { name: "TypeScript", featured: true, icon: SiTypescript },
+      { name: "JavaScript", icon: SiJavascript },
+      { name: "Ruby", featured: true, icon: SiRuby },
+      { name: "C#", icon: TbBrandCSharp },
+      { name: "PHP", icon: SiPhp },
+      { name: "Java", icon: FaJava },
+      { name: "C++", icon: SiCplusplus },
+      { name: "VB.NET" },
+      { name: "SQL" },
+      { name: "VBA" },
+      { name: "Bash", icon: SiGnubash },
+      { name: "HTML", icon: SiHtml5 },
+      { name: "CSS", icon: SiCss },
+    ],
+  },
+  {
+    category: "Frontend",
+    skills: [
+      { name: "React", featured: true, icon: SiReact },
+      { name: "Next.js", featured: true, icon: SiNextdotjs },
+      { name: "Tailwind CSS", featured: true, icon: SiTailwindcss },
+      { name: "Bootstrap", icon: SiBootstrap },
+      { name: "shadcn/ui", icon: SiShadcnui },
+      { name: "Vite", icon: SiVite },
+    ],
+  },
+  {
+    category: "Backend",
+    skills: [
+      { name: "Ruby on Rails", featured: true, icon: SiRubyonrails },
+      { name: "Node.js", icon: SiNodedotjs },
+      { name: "Laravel", icon: SiLaravel },
+      { name: "ASP.NET" },
+      { name: "REST APIs" },
+    ],
+  },
+  {
+    category: "Data",
+    skills: [
+      { name: "PostgreSQL", featured: true, icon: SiPostgresql },
+      { name: "MySQL", icon: SiMysql },
+      { name: "Microsoft SQL Server", icon: DiMsqlServer },
+      { name: "Supabase", featured: true, icon: SiSupabase },
+    ],
+  },
+  {
+    category: "Cloud & Infrastructure",
+    skills: [
+      { name: "Amazon S3" },
+      { name: "Amazon CloudFront" },
+      { name: "Vercel", featured: true, icon: SiVercel },
+      { name: "Docker", featured: true, icon: SiDocker },
+      { name: "WSL" },
+    ],
+  },
+  {
+    category: "AI & Agentic Tooling",
+    skills: [
+      { name: "Claude Code", featured: true, icon: SiClaudecode },
+      { name: "OpenAI Codex", icon: RiOpenaiFill },
+      { name: "Cursor", icon: SiCursor },
+      { name: "GitHub Copilot", icon: SiGithubcopilot },
+      { name: "Devin AI" },
+      { name: "Gemini", icon: SiGooglegemini },
+      { name: "MCP (Model Context Protocol)", featured: true, icon: SiModelcontextprotocol },
+    ],
+  },
+  {
+    category: "Desktop",
+    skills: [
+      { name: "WPF (C#)" },
+      { name: "WinForms (C#)" },
+      { name: "WinUI (C#)" },
+      { name: ".NET", icon: SiDotnet },
+    ],
+  },
+  {
+    category: "Tooling & Workflow",
+    skills: [
+      { name: "Git", featured: true, icon: SiGit },
+      { name: "GitHub", icon: SiGithub },
+      { name: "GitHub Actions", icon: SiGithubactions },
+      { name: "VS Code", icon: TbBrandVscode },
+      { name: "pnpm", icon: SiPnpm },
+      { name: "npm", icon: SiNpm },
+      { name: "ESLint", icon: SiEslint },
+      { name: "Prettier", icon: SiPrettier },
+      { name: "Turborepo", icon: SiTurborepo },
+    ],
+  },
+] satisfies StackCategory[];

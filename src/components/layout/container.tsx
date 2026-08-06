@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 
 /**
- * The single measure the whole page is built on. Header, main content and
- * footer all share it so every left edge lines up at every breakpoint.
+ * The single measure the whole page is built on. Main content and the detail
+ * pages share it so every left edge lines up at every breakpoint.
  */
 export function Container({ className, ...props }: React.ComponentProps<"div">) {
   return (

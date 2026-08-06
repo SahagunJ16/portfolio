@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import type { Skill } from "@/data/data";
+import type { Skill } from "@/data";
 import { cn } from "@/lib/utils";
 
 interface TagListProps {
