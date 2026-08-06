@@ -1,4 +1,4 @@
-import { DATA } from "@/data/data";
+import { DATA } from "@/data";
 import {
   getAllSkills,
   getFullName,

@@ -9,7 +9,7 @@ import { SiteSidebar } from "@/components/layout/site-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { DATA } from "@/data/data";
+import { DATA } from "@/data";
 import { toExternalUrl } from "@/lib/format";
 import { getFullName, getInitials, getPrimaryHeadline } from "@/lib/portfolio";
 import {

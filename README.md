@@ -5,9 +5,8 @@
 A personal portfolio. Modern, minimalist and monotone, built on Next.js App
 Router with shadcn/ui.
 
-Everything is rendered from a single static data file. There is no CMS, no
-database and no API — update [`src/data/data.tsx`](src/data/data.tsx) and the
-whole site follows.
+Everything is rendered from a static data folder. There is no CMS, no database
+and no API — update [`src/data/`](src/data/) and the whole site follows.
 
 ## Contents
 
@@ -108,9 +107,22 @@ sites. See [`public/images/README.md`](public/images/README.md) for details.
 
 ## Editing content
 
-All copy lives in [`src/data/data.tsx`](src/data/data.tsx), typed against the
-`PortfolioData` interface in the same file. TypeScript will tell you if a
+All copy lives in [`src/data/`](src/data/), one file per top-level key, typed
+against the `PortfolioData` interface in
+[`src/data/types.ts`](src/data/types.ts). TypeScript will tell you if a
 required field is missing.
+
+```
+src/data/
+  index.ts           composes DATA — the only thing consumers import
+  types.ts           every type, including PortfolioData
+  profile.ts         contact.ts       socials.ts        overview.ts
+  experiences.ts     educations.ts    stack.ts          certifications.ts
+```
+
+Each fragment ends in `satisfies <Type>` rather than carrying a `: Type`
+annotation — that is what keeps literal types precise and typos in field names
+an error. Fragment files import types from `./types` only, never from `@/data`.
 
 **`experiences` is nested one level.** An entry is an *organization* holding a
 `roles` array — the shape a career actually has:
@@ -186,7 +198,7 @@ src/
                           per section
     ui/                   shadcn components (project-owned source)
     *.tsx                 shared atoms — TagList, MetaList, DateRange, ViewAllLink, …
-  data/data.tsx           ← all content
+  data/                   ← all content, one file per key + types.ts, index.ts
   hooks/                  useActiveSection, useCopyToClipboard, useIsHydrated
   lib/                    format, portfolio, navigation, seo, json-ld, utils
 ```

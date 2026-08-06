@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import type { Experience, ExperienceRole } from "@/data/data";
+import type { Experience, ExperienceRole } from "@/data";
 import { getExperienceSpan } from "@/lib/portfolio";
 import { cn } from "@/lib/utils";
 

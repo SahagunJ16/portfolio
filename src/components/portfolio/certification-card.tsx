@@ -1,7 +1,7 @@
 import { ArrowUpRightIcon, AwardIcon, BadgeCheckIcon } from "lucide-react";
 
 import { TagList } from "@/components/tag-list";
-import type { Certification } from "@/data/data";
+import type { Certification } from "@/data";
 import { formatMonthYear, toIsoMonth } from "@/lib/format";
 
 interface CertificationCardProps {

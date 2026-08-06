@@ -1,4 +1,4 @@
-import { DATA } from "@/data/data";
+import { DATA } from "@/data";
 import { Button } from "@/components/ui/button";
 import { toExternalUrl } from "@/lib/format";
 import { cn } from "@/lib/utils";

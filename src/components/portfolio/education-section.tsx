@@ -1,7 +1,7 @@
 import { DateRange } from "@/components/date-range";
 import { Section } from "@/components/layout/section";
 import { MetaList, type MetaItem } from "@/components/meta-list";
-import { DATA } from "@/data/data";
+import { DATA } from "@/data";
 
 export function EducationSection() {
   return (

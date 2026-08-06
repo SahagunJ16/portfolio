@@ -17,7 +17,7 @@ reachable at `/images/experiences/logos/foo.png`. A separate directory from
 
 The filename is not guessed at runtime. Drop the file here, then set it on
 the matching organization's `logo` field in
-[`src/data/data.tsx`](../../../src/data/data.tsx), e.g.:
+[`src/data/experiences.ts`](../../../src/data/experiences.ts), e.g.:
 
 ```ts
 {

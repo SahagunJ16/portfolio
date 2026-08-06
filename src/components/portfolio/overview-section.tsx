@@ -1,5 +1,5 @@
 import { Section } from "@/components/layout/section";
-import { DATA } from "@/data/data";
+import { DATA } from "@/data";
 
 export function OverviewSection() {
   const [lead, ...rest] = DATA.overview.description;

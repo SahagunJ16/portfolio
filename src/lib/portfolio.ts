@@ -5,7 +5,7 @@ import {
   type ExperienceRole,
   type MonthYear,
   type Skill,
-} from "@/data/data";
+} from "@/data";
 import { monthsBetween } from "@/lib/format";
 
 /** Overall dates an organization was worked at, derived from its roles. */

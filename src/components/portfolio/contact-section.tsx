@@ -1,7 +1,7 @@
 import { CopyButton } from "@/components/copy-button";
 import { Section } from "@/components/layout/section";
 import { MetaList, type MetaItem } from "@/components/meta-list";
-import { DATA } from "@/data/data";
+import { DATA } from "@/data";
 import { getPublicLocation } from "@/lib/portfolio";
 
 /**
