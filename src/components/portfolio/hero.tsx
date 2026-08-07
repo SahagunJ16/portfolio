@@ -13,11 +13,8 @@ import {
   getYearsOfExperience,
 } from "@/lib/portfolio";
 import { AVATAR_PATH, RESUME_PATH } from "@/lib/seo";
+import { GlareHover } from "@/components/ui/glare-hover";
 
-/**
- * Opening block: the only `<h1>` on the page, the headline stack, location,
- * and the primary calls to action.
- */
 export function Hero() {
   const fullName = getFullName();
   const [primaryHeadline, ...supportingHeadlines] = DATA.overview.headlines;
@@ -25,37 +22,28 @@ export function Hero() {
   return (
     <Container id="top" className="py-16 sm:py-24 lg:py-28">
       <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-10">
-        {/*
-          No `size` prop: its `data-[size=lg]:size-10` is an attribute-scoped
-          rule that outranks a plain `size-*` class, so it would silently win
-          over the sizing below. Left at the default, tailwind-merge resolves
-          these normally.
-        */}
-        <Avatar className="size-28 shrink-0 sm:size-36">
-          {/*
-            Routed through next/image so the source file is resized and served
-            as AVIF/WebP rather than shipping the full-resolution original.
-            `priority` because this is above the fold.
-          */}
-          <AvatarImage
-            src={AVATAR_PATH}
-            render={
-              <Image
-                src={AVATAR_PATH}
-                alt={`Portrait of ${fullName}`}
-                width={288}
-                height={288}
-                sizes="144px"
-                priority
-              />
-            }
-            className="bg-background"
-          />
+        <GlareHover className="rounded-full border-2 border-primary">
+          <Avatar className="size-28 shrink-0 sm:size-36">
+            <AvatarImage
+              src={AVATAR_PATH}
+              render={
+                <Image
+                  src={AVATAR_PATH}
+                  alt={`Portrait of ${fullName}`}
+                  width={288}
+                  height={288}
+                  sizes="144px"
+                  priority
+                />
+              }
+              className="bg-background"
+            />
 
-          <AvatarFallback className="bg-background font-heading text-4xl">
-            {getInitials()}
-          </AvatarFallback>
-        </Avatar>
+            <AvatarFallback className="bg-background font-heading text-4xl">
+              {getInitials()}
+            </AvatarFallback>
+          </Avatar>
+        </GlareHover>
 
         <div className="flex min-w-0 flex-col gap-5">
           <div className="flex flex-col gap-3">
@@ -91,7 +79,6 @@ export function Hero() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {/* nativeButton={false}: Base UI needs to know this renders an <a>, not a <button>. */}
             <Button
               nativeButton={false}
               render={<a href={`mailto:${DATA.contact.email}`} />}
