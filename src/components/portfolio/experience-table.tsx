@@ -27,7 +27,7 @@ export function ExperienceTable({ experiences }: ExperienceTableProps) {
             {rows.map(({ experience, latestRole, span }) => (
               <TableRow key={experience.organization}>
                 <TableCell className="py-3 pl-0 align-top">
-                  <OrganizationLogoLink experience={experience}>
+                  <OrganizationLogoLink experience={experience} size="sm">
                     <span className="font-medium text-foreground">
                       {experience.organization}
                     </span>

@@ -2,16 +2,12 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
 import {
   ArrowUpRightIcon,
   FileTextIcon,
   HashIcon,
   LayersIcon,
   MailIcon,
-  MonitorIcon,
-  MoonIcon,
-  SunIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -54,7 +50,6 @@ export function openCommandPalette() {
 export function CommandPalette({ email, resumeHref, socials }: CommandPaletteProps) {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
-  const { setTheme } = useTheme();
   const { copy } = useCopyToClipboard();
 
   React.useEffect(() => {
@@ -89,12 +84,12 @@ export function CommandPalette({ email, resumeHref, socials }: CommandPalettePro
       open={open}
       onOpenChange={setOpen}
       title="Command palette"
-      description="Jump to a section, copy contact details or change the theme."
+      description="Jump to a section or copy contact details."
       className="sm:max-w-lg"
     >
       {/* CommandDialog supplies the dialog shell only; the cmdk root goes here. */}
       <Command>
-        <CommandInput placeholder="Jump to a section, copy an email, switch theme…" />
+        <CommandInput placeholder="Jump to a section or copy an email…" />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
 
@@ -190,25 +185,6 @@ export function CommandPalette({ email, resumeHref, socials }: CommandPalettePro
             ))}
           </CommandGroup>
 
-          <CommandSeparator />
-
-          <CommandGroup heading="Theme">
-            <CommandItem value="Light theme" onSelect={() => runCommand(() => setTheme("light"))}>
-              <SunIcon aria-hidden />
-              <span>Light</span>
-            </CommandItem>
-            <CommandItem value="Dark theme" onSelect={() => runCommand(() => setTheme("dark"))}>
-              <MoonIcon aria-hidden />
-              <span>Dark</span>
-            </CommandItem>
-            <CommandItem
-              value="System theme"
-              onSelect={() => runCommand(() => setTheme("system"))}
-            >
-              <MonitorIcon aria-hidden />
-              <span>System</span>
-            </CommandItem>
-          </CommandGroup>
         </CommandList>
       </Command>
     </CommandDialog>
