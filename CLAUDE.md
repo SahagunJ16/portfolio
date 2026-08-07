@@ -30,13 +30,14 @@ framework — don't add one without asking.
 
 | Route | What it holds |
 |---|---|
-| `/` | Hero + six sections. Experience, Stack and Certifications are **summaries only** |
+| `/` | Hero + seven sections. Experience, Stack, Certifications and Honors & Awards are **summaries only** |
 | `/experiences` | Every role, expandable |
 | `/stack` | Every category, every skill |
 | `/certifications` | Every certification, grouped by category |
+| `/awards` | Every award, with the citation the home summary omits |
 
-The two detail pages live in the `(pages)/` route group, which doesn't affect
-their URLs.
+The detail pages live in the `(pages)/` route group, which doesn't affect their
+URLs.
 
 ## Rules that matter here
 
@@ -44,8 +45,8 @@ their URLs.
 
 All copy is in `src/data/`, **one file per top-level key** — `profile.ts`,
 `contact.ts`, `socials.ts`, `overview.ts`, `experiences.ts`, `educations.ts`,
-`stack.ts`, `certifications.ts` — so the directory listing is the shape of
-`PortfolioData`. Never hardcode names, dates, job titles or skills into
+`stack.ts`, `certifications.ts`, `awards.ts` — so the directory listing is the
+shape of `PortfolioData`. Never hardcode names, dates, job titles or skills into
 components. If something needs to change on the page, change the data.
 
 - `src/data/types.ts` holds every type. **Fragment files import from `./types`
@@ -76,6 +77,13 @@ the home summary shows every certification (flat, uncategorized); only
 `/certifications` groups them by category. `skills` on a certification are
 plain strings (the issuer's own competency tags), not a reference into
 `stack` — the two lists overlap in places but aren't the same vocabulary.
+
+**`awards` is flat** — a plain `Award[]`, newest first, with no category layer
+and no `featured` flag. What separates the two views is depth, not filtering:
+the home summary shows date, title and issuer only, and `/awards` adds the
+`description`. An award is not a `Certification` — there's nothing to verify,
+so no credential ID, expiry or URL. `title` is the React key (there's no
+`credentialId` here), so keep titles distinct.
 
 ### Section registry
 

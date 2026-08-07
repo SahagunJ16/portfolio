@@ -1,3 +1,4 @@
+import { awards } from "./awards";
 import { certifications } from "./certifications";
 import { contact } from "./contact";
 import { educations } from "./educations";
@@ -26,4 +27,5 @@ export const DATA = {
   educations,
   stack,
   certifications,
+  awards,
 } satisfies PortfolioData;

@@ -67,6 +67,13 @@ export const SECTIONS = [
     detailLabel: "All certifications",
   },
   {
+    id: "awards",
+    label: "Honors & Awards",
+    hint: "Recognition and competition placements",
+    detailHref: "/awards",
+    detailLabel: "All awards",
+  },
+  {
     id: "contact",
     label: "Contact",
     hint: "How to reach me",

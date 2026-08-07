@@ -108,6 +108,18 @@ export interface CertificationCategory {
   certifications: Certification[];
 }
 
+/**
+ * A recognition received — academic honors, competition placements. Distinct
+ * from a `Certification`: there is nothing to verify, so no credential ID,
+ * expiry or verification URL.
+ */
+export interface Award {
+  title: string;
+  issuer: string;
+  issueDate: MonthYear;
+  description: string;
+}
+
 export interface PortfolioData {
   profile: Profile;
   contact: Contact;
@@ -117,4 +129,5 @@ export interface PortfolioData {
   educations: Education[];
   stack: StackCategory[];
   certifications: CertificationCategory[];
+  awards: Award[];
 }
