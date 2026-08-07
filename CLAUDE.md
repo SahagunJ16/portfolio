@@ -4,7 +4,7 @@ Project guidance for Claude Code. See [README.md](README.md) for full setup docs
 
 ## What this is
 
-A personal portfolio: one summary page plus two detail routes. Modern,
+A personal portfolio: one summary page plus four detail routes. Modern,
 minimalist, **monotone** (zinc only — no hue). Everything renders from one
 static data file. No CMS, no API, no DB.
 
@@ -30,14 +30,14 @@ framework — don't add one without asking.
 
 | Route | What it holds |
 |---|---|
-| `/` | Hero + seven sections. Experience, Stack, Certifications and Honors & Awards are **summaries only** |
+| `/` | Hero + six sections. Experience, Stack, Certifications and Honors & Awards are **summaries only** |
 | `/experiences` | Every role, expandable |
 | `/stack` | Every category, every skill |
 | `/certifications` | Every certification, grouped by category |
 | `/awards` | Every award, with the citation the home summary omits |
 
 The detail pages live in the `(pages)/` route group, which doesn't affect their
-URLs.
+URLs. Contact is **not** a route or a section — it's the site-wide footer.
 
 ## Rules that matter here
 
@@ -87,14 +87,25 @@ so no credential ID, expiry or URL. `title` is the React key (there's no
 
 ### Section registry
 
-`src/lib/navigation.ts` exports `SECTIONS`. It drives section numbering, the
-sidebar nav, the scroll-spy hook, the ⌘K palette **and the sitemap**. A section
-with a `detailHref` gets a "View All" link — rendered by `Section` itself in
-the header row, not by the section component — and a sitemap entry
-automatically.
+`src/lib/navigation.ts` exports `SECTIONS`. It drives the home page's anchors,
+the ⌘K palette's "Sections" group, the sidebar nav **and the sitemap**. A
+section with a `detailHref` gets a "View All" link — rendered by `Section`
+itself in the header row, not by the section component — plus a sitemap entry
+and a sidebar row, automatically.
 
 Adding or reordering a section means editing that array **and**
 `src/app/page.tsx` — nothing else.
+
+**Nothing is numbered.** The `01 —` index labels were removed on purpose from
+the sidebar, the section headers, the page headers, the palette and the
+category rows on `/stack` and `/certifications`. `formatIndex()` was deleted
+with them. Don't reintroduce them.
+
+The sidebar lists **routes, not sections** — `getNavRoutes()` returns the home
+page plus every section with a `detailHref`, and the active item is an exact
+`usePathname()` match. There is deliberately no scroll-spy; the old
+`use-active-section` hook is gone. Home sections keep their `id` anchors for
+deep links and the palette.
 
 It is deliberately free of icons and component references so it stays
 serializable across the server/client boundary. `detailHref: undefined` is
@@ -104,15 +115,16 @@ check.
 
 ### Server/client boundary
 
-`page.tsx`, both detail pages and all six sections are Server Components. Keep
-it that way. Only these are `"use client"`: `theme-toggle`, `command-palette`,
-`copy-button`, `site-sidebar`, and shadcn primitives that require it.
+`page.tsx`, all four detail pages, all six sections and `SiteFooter` are Server
+Components. Keep it that way. Only these are `"use client"`: `theme-toggle`,
+`command-palette`, `copy-button`, `site-sidebar`, and shadcn primitives that
+require it.
 
 > **`DATA.socials[].icon` holds React component references.** Passing `DATA`
-> into a client component will fail to serialize. `SocialLinks` is shown only
-> in the hero (a Server Component, so this is a non-issue there); the ⌘K
-> palette, which is `"use client"`, gets plain `{ label, url }` pairs instead
-> of the component itself.
+> into a client component will fail to serialize. `SocialLinks` renders in the
+> hero and the footer (both Server Components, so this is a non-issue there);
+> the ⌘K palette, which is `"use client"`, gets plain `{ label, url }` pairs
+> instead of the component itself.
 
 ### Base UI, not Radix
 
@@ -142,14 +154,20 @@ a sticky top bar with a drawer below it — **one component for both**, so the
 nav list is declared once. The root layout offsets main with `lg:pl-56`
 because the rail is out of flow.
 
-`src/components/layout/section.tsx` owns the numbered section header (mono
-label, hairline rule, and the "View All" link for sections with a
-`detailHref`) that every home section uses. It is deliberately a single
-column: the section numbers moved to the sidebar, so a second sticky left
-rail here would just compete with it.
+`src/components/layout/section.tsx` owns the section header (mono label,
+hairline rule, and the "View All" link for sections with a `detailHref`) that
+every home section uses. It is deliberately a single column — a second sticky
+left rail here would just compete with the sidebar.
 
-`Container` is the one shared measure for main and the detail pages. There is
-no site footer — the hero's contact CTA and the ⌘K palette cover it.
+`src/components/layout/site-footer.tsx` is the site-wide footer: email, public
+location, socials, copyright. It replaced the Contact *section*, so it is the
+one place those details are laid out; the hero's "Get in touch" button and the
+⌘K palette are shortcuts to the same address. It carries `id="contact"` so
+`/#contact` still resolves. Mount point is the root layout, **inside** the
+`lg:pl-56` wrapper — outside it, the footer slides under the fixed rail.
+
+`Container` is the one shared measure for main, the detail pages and the
+footer.
 
 ### Reuse before creating
 
@@ -166,8 +184,8 @@ Formatting helpers live in `src/lib/format.ts`; never format a date inline.
 ### Privacy
 
 `DATA.contact` contains a mobile number and postal code. **They are
-intentionally not rendered.** Use `getPublicLocation()` for the address. Don't
-surface either without being asked.
+intentionally not rendered.** Use `getPublicLocation()` for the address — that
+is what `SiteFooter` shows. Don't surface either without being asked.
 
 ### SEO
 

@@ -8,9 +8,9 @@ interface SocialLinksProps {
 }
 
 /**
- * Social buttons rendered from `DATA.socials`, icon + platform name. Shown
- * only in the hero — kept in one place rather than repeated in the sidebar
- * and contact section.
+ * Social buttons rendered from `DATA.socials`, icon + platform name. Used by
+ * the hero and the site footer — kept in one place rather than spelled out at
+ * each call site.
  *
  * Server component by necessity: `DATA.socials[].icon` holds React component
  * references, which cannot be serialised across a client boundary.

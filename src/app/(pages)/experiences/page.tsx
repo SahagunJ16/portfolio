@@ -6,7 +6,6 @@ import { PageHeader } from "@/components/layout/page-header";
 import { ExperienceTimeline } from "@/components/portfolio/experience-timeline";
 import { DATA } from "@/data";
 import { buildBreadcrumbGraph } from "@/lib/json-ld";
-import { getSectionIndex } from "@/lib/navigation";
 import { getYearsOfExperience } from "@/lib/portfolio";
 import { absoluteUrl } from "@/lib/seo";
 
@@ -32,11 +31,7 @@ export const metadata: Metadata = {
 export default function ExperiencesPage() {
   return (
     <>
-      <PageHeader
-        index={getSectionIndex("experience")}
-        title={TITLE}
-        description={DESCRIPTION}
-      />
+      <PageHeader title={TITLE} description={DESCRIPTION} />
 
       {/* Divider is full-bleed, matching how <Section> separates the home page. */}
       <div className="border-t border-border">

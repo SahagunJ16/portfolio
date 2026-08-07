@@ -1,10 +1,13 @@
 /**
- * Single source of truth for the page's sections.
+ * Single source of truth for the home page's sections.
  *
- * Consumed by the page composition, the site sidebar, the scroll-spy hook, the
- * command palette and the sitemap. Deliberately free of icons or component
+ * Consumed by the page composition, the command palette, the sitemap and — via
+ * `getNavRoutes()` — the site sidebar. Deliberately free of icons or component
  * references so it stays serializable across the server/client boundary —
  * unlike `DATA`, whose `socials[].icon` holds React component references.
+ *
+ * Sections are not numbered. That was removed deliberately; don't reintroduce
+ * `01 —` style index labels here or in the components that read this.
  */
 export interface SectionDefinition {
   /** DOM id and anchor target on the home page. */
@@ -73,20 +76,31 @@ export const SECTIONS = [
     detailHref: "/awards",
     detailLabel: "All awards",
   },
-  {
-    id: "contact",
-    label: "Contact",
-    hint: "How to reach me",
-    detailHref: undefined,
-    detailLabel: undefined,
-  },
 ] as const satisfies readonly SectionDefinition[];
 
 export type SectionId = (typeof SECTIONS)[number]["id"];
 
-/** 1-based position, rendered as the "01 —" index label. */
-export function getSectionIndex(id: SectionId): number {
-  return SECTIONS.findIndex((section) => section.id === id) + 1;
+export interface NavRoute {
+  href: string;
+  label: string;
+}
+
+/**
+ * The site sidebar's nav list: the home page, then every section that has a
+ * route of its own. Derived from the registry, so a new detail page joins the
+ * nav without a second list to keep in step.
+ *
+ * Uses `label` ("Experience"), not the `detailLabel` ("All experiences") that
+ * `getDetailRoutes()` returns — these read as destinations, not as links out
+ * of a summary.
+ */
+export function getNavRoutes(): NavRoute[] {
+  return [
+    { href: "/", label: "Overview" },
+    ...SECTIONS.flatMap((section) =>
+      section.detailHref ? [{ href: section.detailHref, label: section.label }] : []
+    ),
+  ];
 }
 
 export interface DetailRoute {

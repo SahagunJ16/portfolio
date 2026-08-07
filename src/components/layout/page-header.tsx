@@ -2,11 +2,8 @@ import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
-import { formatIndex } from "@/lib/format";
 
 interface PageHeaderProps {
-  /** Section number this page expands on, e.g. 2 for Experience. */
-  index: number;
   title: string;
   description: string;
 }
@@ -16,7 +13,7 @@ interface PageHeaderProps {
  * page, the page's only `<h1>` and a standfirst — shared so `/experiences` and
  * `/stack` cannot drift apart.
  */
-export function PageHeader({ index, title, description }: PageHeaderProps) {
+export function PageHeader({ title, description }: PageHeaderProps) {
   return (
     <Container className="py-12 sm:py-16">
       <nav aria-label="Breadcrumb">
@@ -29,12 +26,7 @@ export function PageHeader({ index, title, description }: PageHeaderProps) {
         </Link>
       </nav>
 
-      <div className="mt-8 flex items-center gap-4">
-        <span className="label-mono" aria-hidden>
-          {formatIndex(index)}
-        </span>
-        <span aria-hidden className="h-px flex-1 bg-border" />
-      </div>
+      <div aria-hidden className="mt-8 h-px bg-border" />
 
       <h1 className="mt-4 font-heading text-4xl leading-[1.05] tracking-tight text-balance text-foreground sm:text-5xl">
         {title}

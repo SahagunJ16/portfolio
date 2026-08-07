@@ -5,9 +5,7 @@ import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { TagList } from "@/components/tag-list";
 import { DATA } from "@/data";
-import { formatIndex } from "@/lib/format";
 import { buildBreadcrumbGraph } from "@/lib/json-ld";
-import { getSectionIndex } from "@/lib/navigation";
 import { getAllSkills } from "@/lib/portfolio";
 import { absoluteUrl } from "@/lib/seo";
 
@@ -33,23 +31,18 @@ export const metadata: Metadata = {
 export default function StackPage() {
   return (
     <>
-      <PageHeader index={getSectionIndex("stack")} title={TITLE} description={DESCRIPTION} />
+      <PageHeader title={TITLE} description={DESCRIPTION} />
 
       {/* Divider is full-bleed, matching how <Section> separates the home page. */}
       <div className="border-t border-border">
         <Container className="py-12 sm:py-16">
           <ul className="flex flex-col">
-            {DATA.stack.map((category, index) => (
+            {DATA.stack.map((category) => (
               <li
                 key={category.category}
                 className="grid gap-3 border-b border-border py-6 first:pt-0 last:border-b-0 sm:grid-cols-[11rem_1fr] sm:gap-6"
               >
-                <div className="flex items-baseline gap-2">
-                  <span className="label-mono text-muted-foreground/60" aria-hidden>
-                    {formatIndex(index + 1)}
-                  </span>
-                  <h2 className="label-mono text-foreground">{category.category}</h2>
-                </div>
+                <h2 className="label-mono text-foreground">{category.category}</h2>
                 <TagList
                   items={category.skills}
                   label={category.category}

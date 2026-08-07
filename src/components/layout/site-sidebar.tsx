@@ -19,12 +19,10 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
-import { useActiveSection } from "@/hooks/use-active-section";
-import { formatIndex } from "@/lib/format";
-import { SECTIONS } from "@/lib/navigation";
+import { getNavRoutes } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 
-const SECTION_IDS = SECTIONS.map((section) => section.id);
+const NAV_ROUTES = getNavRoutes();
 
 interface SiteSidebarProps {
   /** Initials shown as the wordmark, e.g. "JS". */
@@ -38,22 +36,19 @@ interface SiteSidebarProps {
  * Site navigation, in two forms from one definition.
  *
  * From `lg` up it is a fixed left rail; below that a sticky top bar with a
- * drawer. Both are driven by the same `SECTIONS` registry, so the nav list
- * exists once.
+ * drawer. Both are driven by the same `getNavRoutes()` list, so the nav exists
+ * once.
+ *
+ * It lists *routes*, not home page sections: the active item is whichever page
+ * you are on. The home sections keep their anchors for deep links and the ⌘K
+ * palette, but they are deliberately not tracked here — there is no scroll-spy.
  */
 export function SiteSidebar({ monogram, fullName, headline }: SiteSidebarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  // Hooks run unconditionally; the hook itself returns null when the section
-  // elements aren't mounted, which is exactly the case on the detail routes.
-  const scrolledSectionId = useActiveSection(SECTION_IDS);
-
-  // On a detail route the corresponding section is active outright. On the
-  // home page it follows the scroll position.
-  const routeSectionId =
-    SECTIONS.find((section) => section.detailHref === pathname)?.id ?? null;
-  const activeId = routeSectionId ?? scrolledSectionId;
+  // Exact match: `startsWith` would light up "Overview" on every route.
+  const isActive = (href: string) => pathname === href;
 
   return (
     <>
@@ -72,31 +67,24 @@ export function SiteSidebar({ monogram, fullName, headline }: SiteSidebarProps) 
             <span className="text-xs text-pretty text-muted-foreground">{headline}</span>
           </Link>
 
-          <nav aria-label="Sections" className="flex-1">
+          <nav aria-label="Pages" className="flex-1">
             <ul className="flex flex-col border-l border-border">
-              {SECTIONS.map((section, index) => {
-                const isActive = activeId === section.id;
-
-                return (
-                  <li key={section.id} className="flex">
-                    <a
-                      href={`/#${section.id}`}
-                      aria-current={isActive ? "true" : undefined}
-                      className={cn(
-                        "-ml-px flex flex-1 items-baseline gap-3 border-l py-2 pl-4 text-sm transition-colors focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none",
-                        isActive
-                          ? "border-foreground text-foreground"
-                          : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
-                      )}
-                    >
-                      <span className="label-mono" aria-hidden>
-                        {formatIndex(index + 1)}
-                      </span>
-                      <span>{section.label}</span>
-                    </a>
-                  </li>
-                );
-              })}
+              {NAV_ROUTES.map((route) => (
+                <li key={route.href} className="flex">
+                  <Link
+                    href={route.href}
+                    aria-current={isActive(route.href) ? "page" : undefined}
+                    className={cn(
+                      "-ml-px flex flex-1 border-l py-2 pl-4 text-sm transition-colors focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none",
+                      isActive(route.href)
+                        ? "border-foreground text-foreground"
+                        : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
+                    )}
+                  >
+                    {route.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
 
@@ -153,25 +141,23 @@ export function SiteSidebar({ monogram, fullName, headline }: SiteSidebarProps) 
               <DrawerContent>
                 <DrawerHeader>
                   <DrawerTitle>Navigate</DrawerTitle>
-                  <DrawerDescription>Jump to a section of the portfolio.</DrawerDescription>
+                  <DrawerDescription>Jump to a page of the portfolio.</DrawerDescription>
                 </DrawerHeader>
 
-                <nav aria-label="Sections" className="p-4">
+                <nav aria-label="Pages" className="p-4">
                   <ul className="flex flex-col">
-                    {SECTIONS.map((section, index) => (
-                      <li key={section.id}>
+                    {NAV_ROUTES.map((route) => (
+                      <li key={route.href}>
                         <DrawerClose
                           nativeButton={false}
-                          render={<a href={`/#${section.id}`} />}
+                          render={<Link href={route.href} />}
+                          aria-current={isActive(route.href) ? "page" : undefined}
                           className={cn(
-                            "flex w-full items-baseline gap-4 border-b border-border py-3 text-left transition-colors hover:bg-muted focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none",
-                            activeId === section.id && "text-foreground"
+                            "flex w-full border-b border-border py-3 text-left font-heading text-base transition-colors hover:bg-muted focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none",
+                            isActive(route.href) ? "text-foreground" : "text-muted-foreground"
                           )}
                         >
-                          <span className="label-mono" aria-hidden>
-                            {formatIndex(index + 1)}
-                          </span>
-                          <span className="font-heading text-base">{section.label}</span>
+                          {route.label}
                         </DrawerClose>
                       </li>
                     ))}
