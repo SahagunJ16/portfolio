@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 export function ThemeToggle({ className }: { className?: string }) {
   const { resolvedTheme, setTheme } = useTheme();
   const hydrated = useIsHydrated();
-  const theme = resolvedTheme === "dark" ? "dark" : "light";
+  const theme = hydrated && resolvedTheme === "dark" ? "dark" : "light";
   const nextTheme = theme === "dark" ? "light" : "dark";
 
   return (
