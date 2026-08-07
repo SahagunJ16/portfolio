@@ -72,8 +72,3 @@ export function toExternalUrl(url: string): string {
 export function toDisplayUrl(url: string): string {
   return url.replace(/^https?:\/\//i, "").replace(/\/$/, "");
 }
-
-/** `1` -> `"01"`, for the mono section index labels. */
-export function formatIndex(index: number): string {
-  return String(index).padStart(2, "0");
-}

@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/json-ld";
 import { AwardsSection } from "@/components/portfolio/awards-section";
 import { CertificationsSection } from "@/components/portfolio/certifications-section";
-import { ContactSection } from "@/components/portfolio/contact-section";
 import { EducationSection } from "@/components/portfolio/education-section";
 import { ExperienceSection } from "@/components/portfolio/experience-section";
 import { Hero } from "@/components/portfolio/hero";
@@ -35,7 +34,6 @@ export default function Home() {
       <EducationSection />
       <CertificationsSection />
       <AwardsSection />
-      <ContactSection />
 
       <JsonLd data={buildJsonLdGraph()} id="profile-schema" />
     </>

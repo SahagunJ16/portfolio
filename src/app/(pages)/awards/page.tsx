@@ -7,7 +7,6 @@ import { PageHeader } from "@/components/layout/page-header";
 import { DATA } from "@/data";
 import { formatMonthYear, toIsoMonth } from "@/lib/format";
 import { buildBreadcrumbGraph } from "@/lib/json-ld";
-import { getSectionIndex } from "@/lib/navigation";
 import { absoluteUrl } from "@/lib/seo";
 
 const TITLE = "Honors & Awards";
@@ -35,7 +34,7 @@ export const metadata: Metadata = {
 export default function AwardsPage() {
   return (
     <>
-      <PageHeader index={getSectionIndex("awards")} title={TITLE} description={DESCRIPTION} />
+      <PageHeader title={TITLE} description={DESCRIPTION} />
 
       {/* Divider is full-bleed, matching how <Section> separates the home page. */}
       <div className="border-t border-border">

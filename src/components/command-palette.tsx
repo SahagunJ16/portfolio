@@ -23,7 +23,6 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import { formatIndex } from "@/lib/format";
 import { getDetailRoutes, SECTIONS } from "@/lib/navigation";
 
 const DETAIL_ROUTES = getDetailRoutes();
@@ -94,7 +93,7 @@ export function CommandPalette({ email, resumeHref, socials }: CommandPalettePro
           <CommandEmpty>No results found.</CommandEmpty>
 
           <CommandGroup heading="Sections">
-            {SECTIONS.map((section, index) => (
+            {SECTIONS.map((section) => (
               <CommandItem
                 key={section.id}
                 value={`${section.label} ${section.hint}`}
@@ -116,9 +115,6 @@ export function CommandPalette({ email, resumeHref, socials }: CommandPalettePro
                 }
               >
                 <HashIcon aria-hidden />
-                <span className="font-mono text-muted-foreground">
-                  {formatIndex(index + 1)}
-                </span>
                 <span>{section.label}</span>
                 {/* CommandShortcut, not a plain span: it also suppresses the
                     trailing check icon that would otherwise fight for ml-auto. */}

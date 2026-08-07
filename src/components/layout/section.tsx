@@ -1,7 +1,6 @@
 import { Container } from "@/components/layout/container";
 import { ViewAllLink } from "@/components/view-all-link";
-import { formatIndex } from "@/lib/format";
-import { getSectionDetail, getSectionIndex, type SectionId } from "@/lib/navigation";
+import { getSectionDetail, type SectionId } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 
 interface SectionProps {
@@ -16,13 +15,11 @@ interface SectionProps {
 }
 
 /**
- * The editorial index shell every section on the page uses.
+ * The editorial shell every section on the page uses.
  *
- * A single column headed by a numbered mono label, a hairline rule, and — for
- * sections with a detail route — a right-aligned "View All" link. The section
- * number used to live in a sticky left rail; that moved to the fixed site
- * sidebar, so keeping a second rail here would just be two competing left
- * margins.
+ * A single column headed by a mono label, a hairline rule, and — for sections
+ * with a detail route — a right-aligned "View All" link. Sections are not
+ * numbered; that was removed deliberately, so don't add an index label back.
  */
 export function Section({
   id,
@@ -33,7 +30,6 @@ export function Section({
   className,
 }: SectionProps) {
   const headingId = `${id}-heading`;
-  const index = getSectionIndex(id);
   const detail = getSectionDetail(id);
 
   return (
@@ -46,9 +42,6 @@ export function Section({
     >
       <Container className="py-14 sm:py-20">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <span className="label-mono" aria-hidden>
-            {formatIndex(index)}
-          </span>
           <h2
             id={headingId}
             className="font-mono text-xs tracking-[0.18em] text-foreground uppercase"

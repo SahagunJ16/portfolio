@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 import { CommandPalette } from "@/components/command-palette";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteSidebar } from "@/components/layout/site-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -105,6 +106,10 @@ export default function RootLayout({
       lang="en"
       // next-themes writes the theme class here before paint.
       suppressHydrationWarning
+      // globals.css sets `scroll-behavior: smooth`; this tells Next to opt out
+      // of it during route transitions, so sidebar navigation lands at the top
+      // instead of animating there.
+      data-scroll-behavior="smooth"
       className={cn("h-full", geistSans.variable, geistMono.variable, instrumentSans.variable)}
     >
       <body className="min-h-full antialiased">
@@ -133,6 +138,8 @@ export default function RootLayout({
               <main id="main" className="flex-1">
                 {children}
               </main>
+
+              <SiteFooter />
             </div>
 
             {/* Serializable props only — DATA.socials[].icon cannot cross this boundary. */}
