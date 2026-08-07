@@ -73,6 +73,8 @@ export function buildPersonSchema() {
       name: education.school,
       address: toPostalAddress(education.address),
     })),
+    // `Person.award` is repeatable Text — there is no slot for the citation.
+    award: DATA.awards.map((award) => award.title),
   };
 }
 
