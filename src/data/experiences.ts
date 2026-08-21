@@ -17,7 +17,10 @@ export const experiences = [
           month: 4,
           year: 2025,
         },
-        end: null,
+        end: {
+          month: 8,
+          year: 2026,
+        },
         summary:
           "Contributing to full-stack development within a network security environment, building operational systems using Ruby on Rails, React/Next.js, and PostgreSQL-backed services within an AWS-based infrastructure.",
         highlights: [
